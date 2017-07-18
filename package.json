@@ -1,0 +1,19 @@
+{
+  "name": "farm-manager",
+  "version": "1.0.0",
+  "description": "A farm management desktop application.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "",
+  "keywords": [],
+  "author": "JP",
+  "license": "All Rights Reserved",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  },
+  "dependencies": {
+    "nedb": "^1.8.0"
+  }
+}

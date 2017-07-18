@@ -1,0 +1,18 @@
+.header-bar {
+	background: lightgray;
+	border-bottom: 1px solid gray;
+	height: 24px;
+	padding: 2px;
+	width: 100%;
+}
+
+.main-header {
+	display: inline-block;
+	font-size: 1em;
+	font-weight: bolder;
+}
+
+.header-bar .dateTime {
+	float: right;
+	margin-right: 4px;
+}

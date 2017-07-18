@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Farm Savers Farm Manager</title>
+
+    <link rel="stylesheet" type="text/css" href="resources/jquery-ui-1.12.1/jquery-ui.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/layout.css">
+    <link rel="stylesheet" type="text/css" href="css/elements.css">
+    <link rel="stylesheet" type="text/css" href="css/header-bar.css">
+    <link rel="stylesheet" type="text/css" href="css/main-content.css">
+
+  </head>
+  <body>
+
+    <!-- DIALOG BOX FORMS -->
+
+    <div id="crop-form" title="Add New Crop"></div>
+
+    <!-- Crop Edit Form -->
+
+    <div id="crop-edit-form" title="Edit Crop"></div>
+
+    <!-- PAGE HTML STARTS HERE -->
+    
+    <header class="header-bar">
+      <div class="container">
+
+        <h1 class="main-header">Farm Savers Farm Manager</h1>
+
+        <div class="dateTime"></div>
+
+        </div> <!-- end .container -->
+    </header>
+
+    <div class="container">
+
+
+      <main>
+        <div id="tabs">
+          <ul>
+            <li><a href="#crop">Crops</a></li>
+            <li><a href="#row">Rows</a></li>
+            <li><a href="#task">Tasks</a></li>
+          </ul>
+          <div id="crop">
+            <div id="crops-table" class="mt"></div>
+          </div>
+          <div id="row">
+            <p>Loading rows...</p>
+          </div>
+          <div id="task">
+            <p>Loading tasks...</p>
+          </div>
+        </div>
+
+
+      </main>
+
+      <aside class="center">
+        <div class="ui-button block" id="add-crop">Add New Crop</div>
+        <div class="ui-button block" id="add-row">Add New Row</div>
+        <div class="ui-button block" id="add-task">Add New Task</div>
+      </aside>
+      
+    </div> <!-- end .container -->
+    
+
+  </body>
+
+  
+
+  <script> require('./renderer.js'); </script>
+</html>
