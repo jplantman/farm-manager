@@ -5,6 +5,7 @@
     <title>Farm Savers Farm Manager</title>
 
     <link rel="stylesheet" type="text/css" href="resources/jquery-ui-1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <link rel="stylesheet" type="text/css" href="css/elements.css">
@@ -17,17 +18,23 @@
     <!-- DIALOG BOX FORMS -->
 
     <div id="crop-form" title="Add New Crop"></div>
-
-    <!-- Crop Edit Form -->
-
     <div id="crop-edit-form" title="Edit Crop"></div>
+
+    <div id="row-form" title="Add New Row"></div>
+    <div id="row-edit-form" title="Edit Row"></div>
+
+    <div id="task-form" title="Add New Task"></div>
+    <div id="task-edit-form" title="Edit Task"></div>
+
+    <div id="family-form" title="Add New Plant Family"></div>
+    <div id="family-edit-form" title="Edit Plant Family"></div>
 
     <!-- PAGE HTML STARTS HERE -->
     
     <header class="header-bar">
       <div class="container">
 
-        <h1 class="main-header">Farm Savers Farm Manager</h1>
+        <h1 class="main-header"><i class="fa fa-globe" aria-hidden="true"></i> Farm Savers Farm Manager</h1>
 
         <div class="dateTime"></div>
 
@@ -43,26 +50,31 @@
             <li><a href="#crop">Crops</a></li>
             <li><a href="#row">Rows</a></li>
             <li><a href="#task">Tasks</a></li>
+            <li><a href="#family">Families</a></li>
           </ul>
           <div id="crop">
-            <div id="crops-table" class="mt"></div>
+            <div id="crops-table" class="mt">Sorry! Not found...</div>
           </div>
           <div id="row">
-            <p>Loading rows...</p>
+            <div id="rows-table" class="mt">Sorry! Not found...</div>
           </div>
           <div id="task">
-            <p>Loading tasks...</p>
+            <div id="tasks-table" class="mt">Sorry! Not found...</div>
+          </div>
+          <div id="family">
+            <div id="families-table" class="mt">Sorry! Not found...</div>
           </div>
         </div>
 
 
       </main>
 
-      <aside class="center">
-        <div class="ui-button block" id="add-crop">Add New Crop</div>
-        <div class="ui-button block" id="add-row">Add New Row</div>
-        <div class="ui-button block" id="add-task">Add New Task</div>
-      </aside>
+      <sidebar class="center">
+        <div class='ui-button block'>Help Guide</div>
+        <div class='ui-button block'>Options</div>
+        <div class='ui-button block'>Get Weather</div>
+        <div class='ui-button block'>Planting Calendar</div>
+      </sidebar>
       
     </div> <!-- end .container -->
     

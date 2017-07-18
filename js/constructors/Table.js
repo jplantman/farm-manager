@@ -1,6 +1,6 @@
 "use strict";
 
-const db = require('./database.js');
+const db = require('../database.js');
 const Form = require('./Form.js')
 
 function Table (params){
@@ -25,8 +25,8 @@ function Table (params){
 	this.tableDockSelector = params.tableDockSelector;
 	this.tableDockElem = $(params.tableDockSelector); // where to insert the table
 
-		// Create Table Function
-	this.createTable = function(params){
+		// Render Table Function
+	this.renderTable = function(params){
 	  params = params || {}; // options on how to modify the table to be displayed
 	  let query = {};
 	  let callback = function(docs){
@@ -49,7 +49,7 @@ function Table (params){
 	        docs = docs.filter( function(obj){
 	          var match;
 	          for (let i = 0; i < that.fields.length; i++) {
-	            let string = obj[that.fields[i][0]];
+	            let string = obj[that.fields[i].n];
 	            let regex = new RegExp(params.search);
 	            match = regex.test(string);
 	            if (match){ return true }; 
@@ -65,10 +65,13 @@ function Table (params){
 
 	    }
 
-	    var out = "<h1>"+that.tableTitle+" <i>("+docs.length+")</i></h1>";
+	    var out = "<div class='add-new-item ui-button flt-r mr'>Add New "+that.tableTitle+"</div>"+
+	    			"<h1>"+that.tableTitle+" <small>("+docs.length+")</small></h1>";
 	    out += "<table class='table'><thead><tr>";
 	    for (var i = 0; i < that.fields.length; i++) {
-	      out += "<th data-sorter='"+that.fields[i][0]+"'>" + that.fields[i][1] + "</th>";
+	      if (!that.fields[i].noAppear){ 	
+	      	out += "<th data-sorter='"+that.fields[i].n+"'>" + that.fields[i].t + "</th>";
+	      }
 	    };
 	    out += "</tr></thead><tbody>";
 	    for (var i = 0; i < docs.length; i++) {
@@ -84,13 +87,25 @@ function Table (params){
 	        //no highlight
 	        out += "<tr>";
 	      }
-	      
+	      // Make fields for each row on table
 	      for (let j = 0; j < that.fields.length; j++) {
-	        out += '<td'+ ( that.fields[j][2] ? ' class="'+that.fields[j][2]+'" data-id="'+ docs[i]._id +'"' : '' ) +'>'+ (docs[i][ that.fields[j][0] ] || '') +'</td>'
+	      	if (!that.fields[j].noAppear){
+	        	out += '<td>';
+	        	if (that.fields[j].linkBefore && docs[i].link){ // check for link globe
+	      			out += '<a href="'+docs[i].link+'" target="_blank"><i class="fa fa-globe flt-l hover" aria-hidden="true"></i></a> '
+	      		}
+	        	out += '<span '+ 
+	        	// check for classes to add
+	        	( that.fields[j].c ? ' class="'+that.fields[j].c+'" data-id="'+ docs[i]._id +'"' : '' )
+	        	 +'>'+ (docs[i][ that.fields[j].n ] || '') +'</span></td>';
+	        }
 	      };
 	      out += "</tr>";
 	    };
 	    out += '</tbody></table>';
+
+	    // add link icon 
+	    $(that.tableDockSelector+" .globe-field").before()
 
 	    // output table html
 	    that.tableDockElem.html(out);
@@ -100,36 +115,31 @@ function Table (params){
 	      let sortBy = $(this).attr('data-sorter');
 	      let params = JSON.parse( JSON.stringify(that.lastSearch || {}) );
 	      params.sortBy = sortBy;
-	      that.createTable( params );
+	      that.renderTable( params );
 	    } );
 
+	    // click to add
+	    $(that.tableDockSelector+" .add-new-item").click(function(){ that.addForm.J.dialog( "open" ) });	
+
 	    // click to edit
-	    // $(this.tableDockSelector+" .edit-field").click( function() {
-	    //   let id = $(this).attr('data-id');
-	    //   db.updateID = id;
-	      
-	    //   db.getCrop(function(crop){
-	    //     $('#edit-crop-name').val(crop.name);
-	    //     $('#edit-crop-variety').val(crop.variety);
-	    //     $('#edit-crop-family').val(crop.family);
-	    //     $('#edit-crop-spacing').val(crop.spacing);
-	    //     $('#edit-crop-dtm').val(crop.dtm);
-	    //     $('#edit-crop-notes').val(crop.notes);
+	    $(that.tableDockSelector+" .edit-field").click( function() {
+	      let id = $(this).attr('data-id');
+	      that.editForm.updateID = id;
+	      that.editForm.editItem(id);
 
-	    //   }, {_id: id});
-
-	    //   cropEditForm.dialog('open');
-
-	    // } );
+	    } );
 
 
 	  }
 	  db.getItems( that.db, callback, query);
 	}
-	this.createTable();
+	
 
 	// "Add" Form
 	this.addForm = new Form(this, params.addForm);
+
+	// "Edit" Form
+	this.editForm = new Form(this, params.editForm);
 	
 	// Create Search Form //
 	this.searchFormHTML = params.searchFormHTML;
@@ -145,11 +155,15 @@ function Table (params){
 	  let searchBy = $('#'+this.tabPanelID+' input[name="'+this.searchRadioSelector+'"]:checked').attr('data-tag');
 	  params = { search: query, searchBy: searchBy };
 	  this.lastSearch = params;
-	  this.createTable( params );
+	  this.renderTable( params );
 	}
 
 	this.searchBtnElem.click( this.search );
 
+	this.searchBarElem.on('keypress', e => { if (e.keyCode == 13){ this.search() } } );
+
+	// initialize table
+	this.renderTable();
 }
 
 

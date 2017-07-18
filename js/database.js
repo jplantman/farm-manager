@@ -1,7 +1,9 @@
 // Initialize the database
 var Datastore = require('nedb');
 exports.dbList = { // key is passed to Table as 'dbName' param
-	cropDB: new Datastore({ filename: 'db/crops.db', autoload: true })
+	cropDB: new Datastore({ filename: 'db/crops.db', autoload: true }),
+	rowDB: new Datastore({ filename: 'db/rows.db', autoload: true }),
+	taskDB: new Datastore({ filename: 'db/tasks.db', autoload: true })
 }
 
 exports.addItem = function( db, crop, callback ){
@@ -19,8 +21,25 @@ exports.getItems = function(db, callback, searchTerms){
 	} );
 }
 
+exports.updateItem = function( db, query, update, options, callback ){
+	db.update(query, update, options, function(err, updatedItem) {
 
+	    if (callback){ callback(updatedItem) }
+	    	
+	});
+}
 
+exports.deleteItem = function(db, id, callback){
+	db.remove({_id: id}, {}, callback);
+}
+
+exports.getItem = function(db, callback, searchTerms){
+	db.findOne( searchTerms, function(err, item){
+
+		callback(item);
+
+	} );
+}
 
 // exports.addCrop = function( crop, callback ){
 // 	cropDB.insert(crop, function(err, newCrop) {

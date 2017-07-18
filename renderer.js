@@ -5,16 +5,16 @@
 
 window.$ = window.jQuery = require('./resources/jquery-3.1.1.min.js');
 require('./resources/jquery-ui-1.12.1/jquery-ui.min.js');
+
+
 require('./js/dateTime.js');
-//const remote = require('electron').remote;
-
-const mainDisplay = $('.main-display');
-
 
 db = require('./js/database.js');
-//dbc = require('./js/dbController.js');
-//require('./js/cropsController.js');
-require('./js/crops-table.js');
+
+require('./js/tables/crops-table.js');
+require('./js/tables/rows-table.js');
+require('./js/tables/tasks-table.js');
+require('./js/tables/families-table.js');
 
 
 // Jquery UI
@@ -26,8 +26,14 @@ $( "fieldset" ).controlgroup();
 
 
 
+// to open links in default browser
+const shell = require('electron').shell;
 
-
+// assuming $ is jQuery
+$(document).on('click', 'a[href^="http"]', function(event) {
+    event.preventDefault();
+    shell.openExternal(this.href);
+});
 
 
 

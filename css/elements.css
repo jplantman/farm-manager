@@ -3,16 +3,15 @@
 	margin: 0.5em;
 }
 
+.italics { font-style: italic; }
+.center { text-align: center }
+.mt { margin-top: 30px }
+.mr { margin-right: 60px }
+.mb { margin-bottom: 200px }
+.flt-r { float: right; }
+.flt-l { float: left; }
 
-.center {
-	text-align: center;
-}
-
-.mt {
-	margin-top: 30px;
-}
-
-i {
+small {
 	font-size: 0.7em;
 	color: grey;
 }
@@ -26,17 +25,29 @@ input.text { margin-bottom:3px; width:95%; padding: .2em; }
 fieldset { padding:0; border:0; margin-top:15px; }
 .validateTips { border: 1px solid transparent; padding: 0.3em; border-radius: 4px}
 
-#quickAdd {
-	float: right;
-}
+
 
 .edit-field {
 	color: steelblue;
 	cursor: pointer;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
+h1 {
+	display: inline-block;
+}
+
+.hover {
+	transition: text-shadow 0.5s, color 0.5s;
+}
+
+.hover:hover {
+	color: #088A29;
+	text-shadow: 0 0 10px #088A29;
+}
+
 .edit-field:hover {
-	font-weight: bolder;
+	text-decoration: underline;
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 
