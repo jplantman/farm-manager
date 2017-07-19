@@ -1,17 +1,28 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
 const Table = require('../constructors/Table.js');
-const SIFD = require('../constructors/StandardInputFieldData.js');
-const quickAddData = require('../quick-add-crops.js');
+const quickAddData = require('../lists/quick-add-crops.js');
 
 let fields = [
-	// { n: 'name', t: 'Title', c: 'class-name', r: /regexp/, rErr: 'regex error message', l(limit): [min, max] } (see StandardInputFieldData.js)
-	SIFD({ n: 'name', t: 'Name', c: 'edit-field', linkBefore: true}, 3, 24),
-	SIFD({ n: 'variety', t: 'Variety'}, 0, 49),
-	SIFD({ n: 'latinName', t: 'Latin Name', c: 'italics', fc: 'italics'}),
-	SIFD({ n: 'family', t: 'Family'}),
-	SIFD({ n: 'spacing', t: 'Spacing'}),
-	SIFD({ n: 'dtm', t: 'D.T.M. <br/><small>(days to maturity)</small>'}),
-	SIFD({ n: 'notes', t: 'Notes'}),
-	{ n: 'link', t: 'Link <small>(link to online info about this crop)</small>', noAppear: true}
+	{ n: 'name', t: 'Name', c: 'edit-field', linkBefore: true, l: [3, 20]},
+	{ n: 'variety', t: 'Variety', l: [0, 49]},
+	{ n: 'latinName', t: 'Latin Name', c: 'italics', fc: 'italics'},
+	{ n: 'familyID', t: 'Family', c: 'id-ref'},
+	{ n: 'spacing', t: 'Spacing', lc: 'mt'},
+	{ n: 'dtm', t: 'D.T.M. <br/><small>(days to maturity)</small>'},
+	{ n: 'notes', t: 'Notes'},
+	{ n: 'link', t: 'Link <small>(link to online info about this crop)</small>', noAppear: true, v: 'isURL'}
 ];
 
 
@@ -36,10 +47,18 @@ const crops = new Table(
 					      '<form>'+
 					        '<fieldset>';
 		          	for (var i = 0; i < fields.length; i++) {
-		          		inputHTML += '<label for="'+fields[i].n+'">'+fields[i].t+': </label>'+
-		          			'<input type="text" name="'+fields[i].n+'" class="text ui-widget-content ui-corner-all '+
-		          			(fields[i].fc ? fields[i].fc : "")
-		          			+'"><br/>';
+		          		if (fields[i].n != 'familyID'){
+		          			// create regular text inputs for all the fields except familyID
+			          		inputHTML += '<label for="'+fields[i].n+'"'+
+			          			(fields[i].lc ?  ' class="'+fields[i].lc+'" ' : "") // lc - lable class
+			          			+'>'+fields[i].t+': </label>'+
+			          			'<input type="text" name="'+fields[i].n+'" class="text ui-widget-content ui-corner-all '+
+			          			(fields[i].fc ? fields[i].fc : "")
+			          			+'"><br/>';
+			          	} else { // setup select menu for familyID
+			          		inputHTML += '<label for="'+fields[i].n+'">'+ fields[i].t+'</label>'+
+			          					'<select name="'+fields[i].n+'" class=" ui-widget-content ui-corner-all"></select><br/>';
+			          	}
 		          	};
 		          	inputHTML +=  '</fieldset></form>';
 		          	return inputHTML;
@@ -48,6 +67,17 @@ const crops = new Table(
 		      btnSet: 'add',	
 		      // function is executed after form params are processed
 		      beforeComplete: function(){
+		      	// familyID select menu
+				// create cropID select menu
+			  	db.getItems( db.dbList.familyDB, function(docs){
+			  		if (docs.length === 0){ throw('no families found... families should auto populate, but that must have failed.'); return; }
+			  		let html = '<option value=""></option>';
+			  		for (var i = 0; i < docs.length; i++) {
+			  			html += '<option value="'+docs[i]._id+'">'+docs[i].name+'</option>';
+			  		};
+			  		$('#crop-form [name="familyID"]').html(html);
+			  	}, {});
+
 		      	// 'Quick Add' select input in 'Add Crop Form'
 				var quickAddElem = $('#quickAdd');
 				var quickAdd = quickAddData;
@@ -68,7 +98,7 @@ const crops = new Table(
 				  if (item){
 				      $( "#crop-form [name='name']" ).val(item.name);
 				      $( "#crop-form [name='latinName']" ).val(item.latinName || "");
-				      $( "#crop-form [name='family']" ).val(item.family || "");
+				      $( "#crop-form [name='familyID']" ).val(item.familyID || "");
 				      $( "#crop-form [name='spacing']" ).val(item.spacing || "");
 				      $( "#crop-form [name='dtm']" ).val(item.dtm || "");
 				      $( "#crop-form [name='link']" ).val(item.link || "");
@@ -87,17 +117,39 @@ const crops = new Table(
 		      selector: '#crop-edit-form',
 		      HTML: function(){
 		          	let inputHTML = 
-		          	'<p class="validate-tips"></p>'+
+		          	'<p class="validate-tips">"Name" is required.</p>'+
 		     
 					      '<form>'+
 					        '<fieldset>';
 		          	for (var i = 0; i < fields.length; i++) {
-		          		inputHTML += '<label for="'+fields[i].n+'">'+fields[i].t+': </label>'+
-		          			'<input type="text" name="'+fields[i].n+'" class="text ui-widget-content ui-corner-all"><br/>';
+		          		if (fields[i].n != 'familyID'){
+		          			// create regular text inputs for all the fields except familyID
+			          		inputHTML += '<label for="'+fields[i].n+'"'+
+			          			(fields[i].lc ?  ' class="'+fields[i].lc+'" ' : "") // lc - lable class
+			          			+'>'+fields[i].t+': </label>'+
+			          			'<input type="text" name="'+fields[i].n+'" class="text ui-widget-content ui-corner-all '+
+			          			(fields[i].fc ? fields[i].fc : "")
+			          			+'"><br/>';
+			          	} else { // setup select menu for familyID
+			          		inputHTML += '<label for="'+fields[i].n+'">'+ fields[i].t+'</label>'+
+			          					'<select name="'+fields[i].n+'" class=" ui-widget-content ui-corner-all"></select><br/>';
+			          	}
 		          	};
 		          	inputHTML +=  '</fieldset></form>';
 		          	return inputHTML;
 		          },
+		       beforeComplete: function(){
+		       	// familyID select menu
+				// create cropID select menu
+			  	db.getItems( db.dbList.familyDB, function(docs){
+			  		if (docs.length === 0){ throw('no families found... families should auto populate, but that must have failed.'); return; }
+			  		let html = '<option value=""></option>';
+			  		for (var i = 0; i < docs.length; i++) {
+			  			html += '<option value="'+docs[i]._id+'">'+docs[i].name+'</option>';
+			  		};
+			  		$('#crop-edit-form [name="familyID"]').html(html);
+			  	}, {});
+		       },
 			   // button set for add or edit form
 		      btnSet: 'edit'
 		},

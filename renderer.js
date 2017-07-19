@@ -22,7 +22,7 @@ $( "#tabs" ).tabs();
 $( "[type='radio']" ).checkboxradio({
   icon: false
 });
-$( "fieldset" ).controlgroup();
+//$( "fieldset" ).controlgroup();
 
 
 

@@ -4,8 +4,10 @@ const db = require('../database.js');
 const Form = require('./Form.js')
 
 function Table (params){
+	this.params = params;
 	const that = this;
 	this.lastSearch = {};
+	this.lastResults;
 	this.lastSort;
 
 		// Get Tab Panel ID
@@ -30,6 +32,19 @@ function Table (params){
 	  params = params || {}; // options on how to modify the table to be displayed
 	  let query = {};
 	  let callback = function(docs){
+	  	// Store Results;
+	  	that.lastResults = docs;
+
+	  	// AUTO POP
+	  	if (that.params.autoPop && docs.length === 0){
+	  		let fs = require('fs');
+			let data = fs.readFileSync(that.params.autoPop[0], 'utf-8');
+			fs.writeFile(that.params.autoPop[1], data, ()=>{
+				location.reload();
+			});
+			
+			return;
+	  	}
 
 	    // SORT
 	    if (params.sortBy){ 
@@ -97,7 +112,19 @@ function Table (params){
 	        	out += '<span '+ 
 	        	// check for classes to add
 	        	( that.fields[j].c ? ' class="'+that.fields[j].c+'" data-id="'+ docs[i]._id +'"' : '' )
-	        	 +'>'+ (docs[i][ that.fields[j].n ] || '') +'</span></td>';
+	        	 +'>';
+	        	 // text actually displayed for each <td>:
+	        	 {
+	        	 	let doc = docs[i];
+	        	 	let field = that.fields[j];
+	        	 	let isAnID = /ID/i.test(field.n);
+	        	 	if (isAnID){
+	        	 		out += doc[field.t];
+	        	 	} else {
+	        	 		out += "is not ID";
+	        	 	}
+	        	 }
+	        	 out += '</span></td>';
 	        }
 	      };
 	      out += "</tr>";

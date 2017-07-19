@@ -1,12 +1,10 @@
 const Table = require('../constructors/Table.js');
-const SIFD = require('../constructors/StandardInputFieldData.js');
 
 let fields = [
-	// { n: 'name', t: 'Title', c: 'class-name', r: /regexp/, rErr: 'regex error message', l(limit): [min, max], noBlank: true } (see StandardInputFieldData.js)
-	SIFD({ n: 'name', t: 'Row Name', c: 'edit-field'}, 1),
+	{ n: 'name', t: 'Row Name', c: 'edit-field', l:[1, 49]},
 	{ n: 'cropID', t: 'Crop', c: 'id-ref' },
-	SIFD({ n: 'length', t: 'Length'}),
-	SIFD({ n: 'notes', t: 'Notes'})
+	{ n: 'length', t: 'Length'},
+	{ n: 'notes', t: 'Notes'}
 ];
 
 

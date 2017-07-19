@@ -3,7 +3,8 @@ var Datastore = require('nedb');
 exports.dbList = { // key is passed to Table as 'dbName' param
 	cropDB: new Datastore({ filename: 'db/crops.db', autoload: true }),
 	rowDB: new Datastore({ filename: 'db/rows.db', autoload: true }),
-	taskDB: new Datastore({ filename: 'db/tasks.db', autoload: true })
+	taskDB: new Datastore({ filename: 'db/tasks.db', autoload: true }),
+	familyDB: new Datastore({ filename: 'db/families.db', autoload: true })
 }
 
 exports.addItem = function( db, crop, callback ){

@@ -1,5 +1,7 @@
 "use strict";
 
+const validator = require("validator");
+
 function Form(parentTable, params){
 	let parent = parentTable;
 	this.parent = parent;
@@ -106,8 +108,8 @@ function Form(parentTable, params){
 	// Init Jquery Modal Form //
 	this.J = $( this.selector ).dialog({
 	  autoOpen: false,
-	  height: params.height || 600,
-	  width: params.width || 400,
+	  height: params.height || 500,
+	  width: params.width || 500,
 	  modal: true,
 	  buttons: that.btnsSet( params.btnSet )
 	});
@@ -116,14 +118,25 @@ function Form(parentTable, params){
 Form.prototype.isValid = function(){
 	let valid = true;
 	// test length
-	let fieldsToValidate = this.parent.fields.filter( f => f.limits ); // get fields that have length limits
+	let fieldsToValidate = this.parent.fields.filter( f => f.l ); // get fields that have length limits
 	for (var i = 0; i < fieldsToValidate.length; i++) {
-		console.log('validating', fieldsToValidate[i].n, this.fields, this.fields[fieldsToValidate[i].n]);
 		valid = valid && this.validateLength(
 			this.fields[ fieldsToValidate[i].n ], 
 			fieldsToValidate[i].t, 
-			fieldsToValidate[i].limits[0], 
-			fieldsToValidate[i].limits[1],
+			fieldsToValidate[i].l[0], 
+			fieldsToValidate[i].l[1],
+			this.validateTips
+		);
+		if (!valid){
+			return false;
+		}
+	};
+	// runs validator
+	fieldsToValidate = this.parent.fields.filter( f => f.v );
+	for (var i = 0; i < fieldsToValidate.length; i++) {
+		valid = valid && this.runValidator(
+			this.fields[ fieldsToValidate[i].n ], 
+			fieldsToValidate[i].v,
 			this.validateTips
 		);
 		if (!valid){
@@ -131,20 +144,6 @@ Form.prototype.isValid = function(){
 		}
 	};
 	return valid;
-	// test regexp
-	fieldsToValidate = this.parent.fields.filter( f => f.r ); // get fields that have regexp's
-	for (var i = 0; i < fieldsToValidate.length; i++) {
-		console.log('validating', fieldsToValidate[i].n, this.fields, this.fields[fieldsToValidate[i].n]);
-		valid = valid && this.validateRegexp(
-			this.fields[ fieldsToValidate[i].n ], 
-			fieldsToValidate[i].r, 
-			fieldsToValidate[i].rErr || "No weird characters, please!", 
-			this.validateTips
-		);
-		if (!valid){
-			return false;
-		}
-	};
 };
 
 Form.prototype.validateLength = function(elem, title, min, max, tipElem){
@@ -160,20 +159,23 @@ Form.prototype.validateLength = function(elem, title, min, max, tipElem){
 		return true;
 	}
 };
-Form.prototype.validateRegexp = function(elem, regexp, errMsg, tipElem){
-	if (elem.val() == ''){ return true } // no value always passes
-	if ( !( regexp.test( elem.val() ) ) ) {
-	    elem.addClass( "ui-state-error" );
-	    setTimeout(function() {
-	    elem.removeClass( "ui-state-error", 1500 );
-	  }, 500 );
-	    if (errMsg && tipElem){
-	    	this.updateTips( errMsg, tipElem );
-	    }
-	    return false;
-	  } else {
-	    return true;
-	  }
+Form.prototype.runValidator = function(elem, action, tipElem){
+	if ( validator.isEmpty( elem.val() ) ){ return true } // empty string passes
+	if (action == 'isURL'){
+		if (!validator.isURL( elem.val() ) ){
+			elem.addClass( "ui-state-error" );
+			this.updateTips( "Link must be a valid URL", tipElem );
+			setTimeout(function() {
+			    elem.removeClass( "ui-state-error", 1500 );
+			}, 500 );
+			return false;
+		}
+		// add 'http://' if missing
+		if ( !/^https?:\/\//.test( elem.val() ) ){
+			elem.val( 'http://'+elem.val() );
+		}
+	}
+	return true;
 };
 
 Form.prototype.updateTips = function(tipText, tipElem){
@@ -205,7 +207,5 @@ Form.prototype.btnsSet = function(set){
 		  }
 	}
 }
-
-
 
 module.exports = Form;

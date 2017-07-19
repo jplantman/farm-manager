@@ -1,45 +1,72 @@
-# electron-quick-start
+Notes To Me:
 
-**Clone and run for a quick way to see Electron in action.**
 
-This is a minimal Electron application based on the [Quick Start Guide](http://electron.atom.io/docs/tutorial/quick-start) within the Electron documentation.
+There are tables which stand alone:
+1. Gardens: name, notes (eg. The Back Garden)
+2. Plant Families: name, latin name, link, notes (eg Pea Family)
+3. Task Types: name, notes (eg Weeding)
+4. Workers: name, position, start date, end date (eg Bob)
 
-**Use this app along with the [Electron API Demos](http://electron.atom.io/#get-started) app for API code examples to help you get started.**
+then theres tables which relate to other tables:
+5. Crops: name, variety, latin name, familyID(1), spacing, dtm, link, notes
+6. Rows: name, gardenID(1), size, notes
+7. Tasks: taskTypeID(3), familyID(2), workerID(4), date, time, notes
 
-A basic Electron application needs just these files:
+The app allows for simple and complex searches.
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
+Search functionality starts with a search bar which turns a search into a regexp and tests all fields in the table for matches
+An advanced search menu can drop down, allowing for field-specific searches on multiple fields at a time.
 
-You can learn more about each of these components within the [Quick Start Guide](http://electron.atom.io/docs/tutorial/quick-start).
+eg simple search: 
+search crops which contain a string in any field;
 
-## To Use
+eg complex searches: 
+Q: when was row x weeded last?
+A: search tasks where row == x and tasktype == weeding, sort by date
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+Q: who spent the most time harvesting?
+A: search tasks where tasktype == harvesting, once per worker, summing the total time (better than nothing, but not ideal)
 
-```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
-```
+Q: when did crop x start and stop being harvested each year?
+A: search tasks where crop == x and tasktype == harvest, sort by date
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+Q: what rows have no crops?
+A: search rows, sort by crops
 
-## Resources for Learning Electron
+Q: what rows have been weeded in the last month?
+A: search tasks where tasktype == weeding and date == last month, sort by rows (rows will appear multiple times, but still ok)
 
-- [electron.atom.io/docs](http://electron.atom.io/docs) - all of Electron's documentation
-- [electron.atom.io/community/#boilerplates](http://electron.atom.io/community/#boilerplates) - sample starter apps created by the community
-- [electron/electron-quick-start](https://github.com/electron/electron-quick-start) - a very basic starter Electron app
-- [electron/simple-samples](https://github.com/electron/simple-samples) - small applications with ideas for taking them further
-- [electron/electron-api-demos](https://github.com/electron/electron-api-demos) - an Electron app that teaches you how to use Electron
-- [hokein/electron-sample-apps](https://github.com/hokein/electron-sample-apps) - small demo apps for the various Electron APIs
+Q: what rows have NOT been weeded in the last month?
+A: search tasks where tasktype == weeding and date == last month, sort by rows, look for rows not present (a really bad solution)
 
-## License
+Q: which row was weeded last?
+A: search tasks by weeding, sort by date. look out for rows that have never been weeded.
 
-[CC0 1.0 (Public Domain)](LICENSE.md)
+Q: what workers never did task x? 
+A: search tasks where tasktype == x, sort by workers, look for workers not present.
+
+
+
+
+==ARCHITECTURE==
+
+I will try next for a simpler architecture. Having big classes for tables and forms was too messy, as each table and form is too different. Instead I will do things separately, and extract small pieces of functionality only.
+
+A main.js file will hold universal functions and variables.
+Then, each table will have 1 or more files for its features. each table might get it's own folder.
+
+js - main.js
+   - database.js
+   - tables - gardens - gardens.js
+   					  - add-form.js
+   					  - edit-form.js
+   					  - search.js
+   					  - table.js
+   			- families -
+   			- task-types -
+   			- workers -
+   			- crops -
+   			- rows -
+   			- tasks -
+
+I will try to use as little jquery as possible. but this is less important than the other parts. I only really need it for the date picker.
