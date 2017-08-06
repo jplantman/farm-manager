@@ -1,23 +1,57 @@
 // Initialize the database
 var Datastore = require('nedb');
-exports.dbList = { // key is passed to Table as 'dbName' param
+exports.list = { // key is passed to Table as 'dbName' param
 	cropDB: new Datastore({ filename: 'db/crops.db', autoload: true }),
+	familyDB: new Datastore({ filename: 'db/families.db', autoload: true }),
 	rowDB: new Datastore({ filename: 'db/rows.db', autoload: true }),
+	gardenDB: new Datastore({ filename: 'db/gardens.db', autoload: true }),
 	taskDB: new Datastore({ filename: 'db/tasks.db', autoload: true }),
-	familyDB: new Datastore({ filename: 'db/families.db', autoload: true })
+	taskTypeDB: new Datastore({ filename: 'db/taskTypes.db', autoload: true }),
+	workerDB: new Datastore({ filename: 'db/workers.db', autoload: true }),	
 }
 
-exports.addItem = function( db, crop, callback ){
-	db.insert(crop, function(err, newCrop) {
+exports.datastore = { // stores updated data for each db
+	family: null,
+	crop: null, 
+	row: null, 
+	garden: null,
+	task: null,
+	taskType: null,
+	worker: null
+}
 
-	    if (callback){ callback(newCrop) }
+exports.refreshDatastore = function(callback){ // gets each database, then runs a callback
+	for (let prop in db.datastore){ // set all dbs to null. when all become filled, run callback
+		db.datastore[prop] = null;
+	}
+	for (let prop in db.datastore){ 
+		db.getItems( db.list[prop+'DB'], (data)=>{
+			db.datastore[prop] = data;
+			
+			if ( callback && dbsFilled() ){
+				callback();
+			}
+
+		} );
+	}
+	
+}
+
+function dbsFilled(){
+	for (let prop in db.datastore){ if (!db.datastore[prop]){ return false } }
+	return true;
+}
+
+exports.addItem = function( db, item, callback ){
+	db.insert(item, function(err, newItem) {
+	    if (callback){ callback(newItem) }
 	    	
 	});
 }
 exports.getItems = function(db, callback, searchTerms){
-	db.find( searchTerms, function(err, crops){
+	db.find( searchTerms, function(err, items){
 
-		callback(crops);
+		callback(items);
 
 	} );
 }
@@ -41,42 +75,3 @@ exports.getItem = function(db, callback, searchTerms){
 
 	} );
 }
-
-// exports.addCrop = function( crop, callback ){
-// 	cropDB.insert(crop, function(err, newCrop) {
-
-// 	    if (callback){ callback(newCrop) }
-	    	
-// 	});
-// }
-
-// exports.updateCrop = function( query, update, options, callback ){
-// 	cropDB.update(query, update, options, function(err, updatedCrop) {
-
-// 	    if (callback){ callback(updatedCrop) }
-	    	
-// 	});
-// }
-
-// exports.getCrops = function(callback, searchTerms){
-// 	cropDB.find( searchTerms, function(err, crops){
-
-// 		callback(crops);
-
-// 	} );
-// }
-
-// exports.getCrop = function(callback, searchTerms){
-// 	cropDB.findOne( searchTerms, function(err, crop){
-
-// 		callback(crop);
-
-// 	} );
-// }
-
-// exports.deleteCrop = function(id, callback){
-// 	cropDB.remove({_id: id}, {}, callback);
-// }
-
- 
-

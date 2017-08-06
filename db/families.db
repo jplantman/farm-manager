@@ -1,10 +1,10 @@
-{"name":"Parsley Family","Latin Name":"Apiaceae","notes":"","link":"https://en.wikipedia.org/wiki/Apiaceae","_id":"DIxq92iAIA7gJBqX"}
-{"name":"Cabbage Family","Latin Name":"Brassicaceae","notes":"","link":"https://en.wikipedia.org/wiki/Brassicaceae","_id":"RTegG6L8LHERv2uj"}
-{"name":"Asparagus Family","Latin Name":"Asparagaceae","notes":"","link":"https://en.wikipedia.org/wiki/Asparagaceae","_id":"Sx226wwEVASfUNKm"}
-{"name":"Mint Family","Latin Name":"Lamiaceae","notes":"","link":"https://en.wikipedia.org/wiki/Lamiaceae","_id":"bd5suhuu4kcraQd1"}
-{"name":"Pea Family","Latin Name":"Fabaceae","notes":"","link":"https://en.wikipedia.org/wiki/Fabaceae","_id":"lyZvUyKuL71jzt5s"}
-{"name":"Tomato Family","Latin Name":"Solanaceae","notes":"","link":"https://en.wikipedia.org/wiki/Solanaceae","_id":"lzFqxrIefA6KIsKq"}
-{"name":"Onion Family","Latin Name":"Amaryllidaceae","notes":"","link":"https://en.wikipedia.org/wiki/Amaryllidaceae","_id":"mPbo1Uka9L8xF9jD"}
-{"name":"Rose Family","Latin Name":"Rosaceae","notes":"","link":"https://en.wikipedia.org/wiki/Rosaceae","_id":"qsA7klCpZCdgPSkS"}
-{"name":"Squash Family","Latin Name":"Cucurbitaceae","notes":"","link":"https://en.wikipedia.org/wiki/Cucurbitaceae","_id":"x15ZhPMTl8cBGCG7"}
-{"name":"Sunflower Family","Latin Name":"Asteraceae","notes":"","link":"https://en.wikipedia.org/wiki/Asteraceae","_id":"zmbjDXgqAyLIgPWi"}
+{"name":"Parsley Family","latinName":"Apiaceae","notes":"","link":"https://en.wikipedia.org/wiki/Apiaceae","noDelete":true,"_id":"DIxq92iAIA7gJBqX"}
+{"name":"Cabbage Family","latinName":"Brassicaceae","notes":"","link":"https://en.wikipedia.org/wiki/Brassicaceae","noDelete":true,"_id":"RTegG6L8LHERv2uj"}
+{"name":"Asparagus Family","latinName":"Asparagaceae","notes":"","link":"https://en.wikipedia.org/wiki/Asparagaceae","noDelete":true,"_id":"Sx226wwEVASfUNKm"}
+{"name":"Mint Family","latinName":"Lamiaceae","notes":"","link":"https://en.wikipedia.org/wiki/Lamiaceae","noDelete":true,"_id":"bd5suhuu4kcraQd1"}
+{"name":"Pea Family","latinName":"Fabaceae","notes":"","link":"https://en.wikipedia.org/wiki/Fabaceae","noDelete":true,"_id":"lyZvUyKuL71jzt5s"}
+{"name":"Tomato Family","latinName":"Solanaceae","notes":"","link":"https://en.wikipedia.org/wiki/Solanaceae","noDelete":true,"_id":"lzFqxrIefA6KIsKq"}
+{"name":"Onion Family","latinName":"Amaryllidaceae","notes":"","link":"https://en.wikipedia.org/wiki/Amaryllidaceae","noDelete":true,"_id":"mPbo1Uka9L8xF9jD"}
+{"name":"Rose Family","latinName":"Rosaceae","notes":"","link":"https://en.wikipedia.org/wiki/Rosaceae","noDelete":true,"_id":"qsA7klCpZCdgPSkS"}
+{"name":"Squash Family","latinName":"Cucurbitaceae","notes":"","link":"https://en.wikipedia.org/wiki/Cucurbitaceae","noDelete":true,"_id":"x15ZhPMTl8cBGCG7"}
+{"name":"Sunflower Family","latinName":"Asteraceae","notes":"","link":"https://en.wikipedia.org/wiki/Asteraceae","noDelete":true,"_id":"zmbjDXgqAyLIgPWi"}

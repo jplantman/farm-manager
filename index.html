@@ -20,16 +20,30 @@
     <div id="crop-form" title="Add New Crop"></div>
     <div id="crop-edit-form" title="Edit Crop"></div>
 
+    <div id="family-form" title="Add New Plant Family"></div>
+    <div id="family-edit-form" title="Edit Plant Family"></div>
+
     <div id="row-form" title="Add New Row"></div>
     <div id="row-edit-form" title="Edit Row"></div>
+
+    <div id="garden-form" title="Add New Garden"></div>
+    <div id="garden-edit-form" title="Edit Garden"></div>
 
     <div id="task-form" title="Add New Task"></div>
     <div id="task-edit-form" title="Edit Task"></div>
 
+    <div id="taskType-form" title="Add New Task Type"></div>
+    <div id="taskType-edit-form" title="Edit Task Type"></div>
+
     <div id="family-form" title="Add New Plant Family"></div>
     <div id="family-edit-form" title="Edit Plant Family"></div>
 
+    <div id="worker-form" title="Add New Worker"></div>
+    <div id="worker-edit-form" title="Edit Worker"></div>
+
     <!-- PAGE HTML STARTS HERE -->
+
+
     
     <header class="header-bar">
       <div class="container">
@@ -48,22 +62,36 @@
         <div id="tabs">
           <ul>
             <li><a href="#crop">Crops</a></li>
-            <li><a href="#row">Rows</a></li>
-            <li><a href="#task">Tasks</a></li>
             <li><a href="#family">Families</a></li>
+            <li><a href="#row">Rows</a></li>
+            <li><a href="#garden">Gardens</a></li>
+            <li><a href="#task">Tasks</a></li>
+            <li><a href="#taskType">Task Types</a></li>
+            <li><a href="#worker">Workers</a></li>
+            
           </ul>
           <div id="crop">
-            <div id="crops-table" class="mt">Sorry! Not found...</div>
-          </div>
-          <div id="row">
-            <div id="rows-table" class="mt">Sorry! Not found...</div>
-          </div>
-          <div id="task">
-            <div id="tasks-table" class="mt">Sorry! Not found...</div>
+            <div id="crops-table" class="mt">Error...</div>
           </div>
           <div id="family">
-            <div id="families-table" class="mt">Sorry! Not found...</div>
+            <div id="families-table" class="mt">Error...</div>
           </div>
+          <div id="row">
+            <div id="rows-table" class="mt">No Gardens! Please add gardens first...</div>
+          </div>
+          <div id="garden">
+            <div id="gardens-table" class="mt">Error...</div>
+          </div>
+          <div id="task">
+            <div id="tasks-table" class="mt">Error...</div>
+          </div>
+          <div id="taskType">
+            <div id="taskTypes-table" class="mt">Error...</div>
+          </div>
+          <div id="worker">
+            <div id="workers-table" class="mt">Error...</div>
+          </div>
+          
         </div>
 
 
@@ -73,7 +101,9 @@
         <div class='ui-button block'>Help Guide</div>
         <div class='ui-button block'>Options</div>
         <div class='ui-button block'>Get Weather</div>
-        <div class='ui-button block'>Planting Calendar</div>
+        <div class='ui-button block'>Planting Calculator</div>
+        <div class='ui-button block'>Harvest Tracker</div>
+        <div class='ui-button block'>Garden Notebook </div>
       </sidebar>
       
     </div> <!-- end .container -->

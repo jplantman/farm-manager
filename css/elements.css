@@ -5,6 +5,8 @@
 
 .italics { font-style: italic; }
 .center { text-align: center }
+.mr-s { margin-right: 4px }
+.mb-s { margin-bottom: 20px }
 .mt { margin-top: 30px }
 .mr { margin-right: 60px }
 .mb { margin-bottom: 200px }
@@ -14,6 +16,11 @@
 small {
 	font-size: 0.7em;
 	color: grey;
+}
+em {
+	color: steelblue;
+	text-decoration: underline;
+	cursor: help;
 }
 
 /* Forms */
@@ -27,7 +34,7 @@ fieldset { padding:0; border:0; margin-top:15px; }
 
 
 
-.edit-field {
+[data-edit] {
 	color: steelblue;
 	cursor: pointer;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -41,8 +48,8 @@ h1 {
 }
 
 .hover:hover {
-	color: #088A29;
-	text-shadow: 0 0 10px #088A29;
+	color: steelblue;
+	text-shadow: 0 0 10px gold;
 }
 
 .edit-field:hover {
@@ -71,5 +78,16 @@ h1 {
 	border: none;
 }
 
+/* Search Form */
+.adv-search-fields {
+	display: none;
+}
+.adv-search-btn {
+	color: steelblue;
+	cursor: pointer;
+}
+.adv-search-btn:hover {
+	text-decoration: underline;
+}
 
 

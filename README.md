@@ -9,7 +9,7 @@ There are tables which stand alone:
 
 then theres tables which relate to other tables:
 5. Crops: name, variety, latin name, familyID(1), spacing, dtm, link, notes
-6. Rows: name, gardenID(1), size, notes
+6. Rows: name, gardenID(1), size, harvestTracker, notes, 
 7. Tasks: taskTypeID(3), familyID(2), workerID(4), date, time, notes
 
 The app allows for simple and complex searches.
@@ -46,6 +46,14 @@ Q: what workers never did task x?
 A: search tasks where tasktype == x, sort by workers, look for workers not present.
 
 
+HARVEST TRACKER FEATURE:
+ harvest tracker will tell you which rows need harvesting.
+ 1. It will keep track of when rows are planted, and if that crop's DTM has passed. if it has, that row is harvestable.
+ 2. when a row is harvested, a 'harvest again' option will let the user pick how many days from now to mark this row as harvestable, or to mark the row as 'done' (as in, no more to harvest here) 
+
+ Technical notes for harvest tracker:
+ when a 'direct seeding' or 'transplanting' task is entered, the associated row's harvestTracker field will be updated to show that it is planted. 
+ The harvestTracker will say 'growing' if the crop's DTM has not passed, else use phrases like 'harvest me', 're-growing', and 'done', to keep track of the harvest status of the row. 
 
 
 ==ARCHITECTURE==
@@ -55,9 +63,10 @@ I will try next for a simpler architecture. Having big classes for tables and fo
 A main.js file will hold universal functions and variables.
 Then, each table will have 1 or more files for its features. each table might get it's own folder.
 
-js - main.js
-   - database.js
-   - tables - gardens - gardens.js
+
+js - database.js
+   - tables - tables.js
+   			- gardens - gardens.js
    					  - add-form.js
    					  - edit-form.js
    					  - search.js

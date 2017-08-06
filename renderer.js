@@ -10,21 +10,24 @@ require('./resources/jquery-ui-1.12.1/jquery-ui.min.js');
 require('./js/dateTime.js');
 
 db = require('./js/database.js');
+db.refreshDatastore( ()=>{ console.log(db.datastore) } );
+t = require('./js/tables/tables.js');
+ft = require('./js/tables/fetchTable.js');
 
-require('./js/tables/crops-table.js');
-require('./js/tables/rows-table.js');
-require('./js/tables/tasks-table.js');
-require('./js/tables/families-table.js');
+require('./js/tables/gardens.js');
+require('./js/tables/families.js');
+require('./js/tables/taskTypes.js');
+
+require('./js/tables/workers.js');
+require('./js/tables/crops.js');
+require('./js/tables/rows.js');
+require('./js/tables/tasks.js');
 
 
 // Jquery UI
 $( "#tabs" ).tabs();
-$( "[type='radio']" ).checkboxradio({
-  icon: false
-});
-//$( "fieldset" ).controlgroup();
-
-
+$( ".datepicker").datepicker({ changeMonth: true, changeYear: true, dateFormat: "dd M, yy" });
+$( document ).tooltip();
 
 // to open links in default browser
 const shell = require('electron').shell;
