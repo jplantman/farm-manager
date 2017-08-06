@@ -1,11 +1,12 @@
 "use strict"
 
-
 // Main Table Obj
 const workers = {};
 
 // Store Common Things into Variables //
 workers.title = "Worker";
+workers.name = "worker";
+workers.tabElem = $('a[href="#worker"]');
 workers.panelID = "#worker";
 workers.panelElem = $('#worker');
 workers.tableElem = $('#workers-table');
@@ -98,6 +99,7 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   workers.fieldsData.forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
@@ -122,32 +124,15 @@ $('#worker .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#worker .search-bar').on('input', function(){
-	let params = {
- 		query: workers.getSearchQuery() // advanced query
-	}
-	let afVal = workers.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
- ft.fetchTable(workers.db, workers, params);
-} );
-
-workers.getSearchQuery = function(){
-	let query = {};
-	for (let i in workers.advSearchFields){
-		let val = workers.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(workers.panelID+' .search-bar').on('input', ()=>{ t.search(workers) } );
+$(workers.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(workers) } );
 
 // Initially Fetch Table //
-ft.fetchTable(workers.db, workers, {sortBy: 'name'} );
+ft.fetchTable(workers, {sortBy: 'name'} );
 
-
+workers.tabElem.click( ()=>{
+	ft.fetchTable(workers, {sortBy: 'name'} );
+} )
 
 
 

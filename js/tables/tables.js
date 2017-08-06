@@ -2,17 +2,55 @@ validator = require("validator");
 
 // Helper File for Tables
 
-exports.sort = function(mainTableObj, params, docs){
+function lowercase(str){
+	if (typeof str == 'string'){
+		return str.toLowerCase();
+	}
+	return str;
+}
+
+function compareDate(a, b, gt){ // gt = greater than; if not true, less than
+	a = a.split(/,? /);
+	b = b.split(/,? /);
+	// compare years
+	if (a[2] > b[2]){
+		return gt ? true : false;
+	} else if (a[2] < b[2]){
+		return gt ? false : true;
+	}
+	// compare months
+	let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	if ( months.indexOf(a[1]) > months.indexOf(b[1]) ){
+		return gt ? true : false;
+	} else if ( months.indexOf(a[1]) < months.indexOf(b[1]) ){
+		return gt ? false : true;
+	}
+	// compare day
+	if (a[0] > b[0]){
+		return gt ? true : false;
+	} else {
+		return true;
+	}
+}
+
+exports.sort = function(mainTableObj, params, data){
+	//check if this is a date field
+	let isDate = /date/i.test(params.sortBy);
+
 	if (params.sortBy){ // if params include soryBy,
       if (mainTableObj.lastSort == params.sortBy){ // if last sorted in this way, sort in reverse order
-        docs.sort( (a, b)=>{ return a[params.sortBy] < b[params.sortBy] } );
+        data.sort( (a, b)=>{ 
+        	return  !isDate ? lowercase(a[params.sortBy]) < lowercase(b[params.sortBy]) : compareDate(a[params.sortBy], b[params.sortBy], false);
+        } );
         mainTableObj.lastSort = null; // clear sort history
       } else { // else, sort in normal order
-        docs.sort( (a, b)=>{ return a[params.sortBy] > b[params.sortBy] } );
+        data.sort( (a, b)=>{ 
+        	return !isDate ? lowercase(a[params.sortBy]) > lowercase(b[params.sortBy]) : compareDate(a[params.sortBy], b[params.sortBy], true);
+        } );
         mainTableObj.lastSort = params.sortBy;
       }
     }
-    return docs;
+    return data;
 }
 
 exports.fillTemplate = function(arr, template){
@@ -62,7 +100,9 @@ exports.addItem = function(mainTableObj, formStr, multiAdd ){
     db.addItem( mainTableObj.db, newItem, (newItem)=>{
       let params = JSON.parse( JSON.stringify(mainTableObj.lastSearch) );
       params.highlight = newItem._id;
-      ft.fetchTable(mainTableObj.db, mainTableObj, params );
+      db.refreshDatastore( ()=>{
+      	ft.fetchTable(mainTableObj, params );	
+      } );
     } );
     if (!multiAdd){ t.clear(mainTableObj, formStr) } // this part must be done manually when doing multi-adds
     mainTableObj[formStr].J.dialog('close');  
@@ -86,10 +126,12 @@ exports.editItem = function(mainTableObj, id){
 	 	for (let prop in fields){
 	 		fields[prop].val( item[prop] );
 	 	}
+	 	
+	 	if ( mainTableObj.editForm.onOpen ){ mainTableObj.editForm.onOpen(item); }
+      	mainTableObj.editForm.J.dialog('open');
 
       }, {_id: id});
 
-      mainTableObj.editForm.J.dialog('open');
 }
 
 exports.updateItem = function(mainTableObj){
@@ -105,7 +147,9 @@ exports.updateItem = function(mainTableObj){
     db.updateItem( mainTableObj.db, query, updated, {}, (updatedItem)=>{
       let params = JSON.parse( JSON.stringify(mainTableObj.lastSearch) );
       params.highlight = query._id;
-      ft.fetchTable(mainTableObj.db, mainTableObj, params )
+      db.refreshDatastore( ()=>{
+      	ft.fetchTable(mainTableObj, params );	
+      } );
     } );
     mainTableObj.editForm.J.dialog('close');
 }
@@ -127,7 +171,9 @@ exports.deleteItem = function(mainTableObj){
 
 			
 			db.deleteItem(database, id, ()=>{
-		        ft.fetchTable(mainTableObj.db, mainTableObj, mainTableObj.lastSearch )
+		        db.refreshDatastore( ()=>{
+			    	ft.fetchTable(mainTableObj, params );	
+			    } );
 
 				mainTableObj.editForm.J.dialog("close");
 			});
@@ -139,15 +185,20 @@ exports.deleteItem = function(mainTableObj){
 }
 
 
-exports.getSelectMenuOptions = function(thisForm, otherTable){
-	db.getItems( db.list[otherTable+'DB'], function(docs){
-		//if (docs.length === 0){ throw('no families found... families should auto populate, but that must have failed.'); return; }
-		let html = '<option value=""></option>';
-		for (var i = 0; i < docs.length; i++) {
-			html += '<option value="'+docs[i]._id+'">'+docs[i].name+'</option>';
-		};
+exports.getSelectMenuOptions = function(thisForm, otherTable, showFunc, callback){
+	let html = '<option value=""></option>';
+	let data = db.datastore[otherTable];
+	data.forEach( (item)=>{
+		html += '<option value="'+item._id+'">'+
+		( showFunc ? showFunc(item) : item.name  )
+		+'</option>';
+	} );
+
+	if (callback){
+		callback( $(thisForm+' [name="'+otherTable+'ID"]').html(html) );
+	} else {
 		$(thisForm+' [name="'+otherTable+'ID"]').html(html);
-	}, {});
+	}
 }
 
 
@@ -202,6 +253,32 @@ let updateTips = function(tipText, tipElem){ // update validate tips
 };
 
 
+// Search Functions //
+
+exports.search = function(mainTableObj){
+	let params = {
+ 		query: t.getSearchQuery(mainTableObj) // advanced query
+	}
+	let afVal = mainTableObj.allFieldsSearchElem.val();
+	if (afVal != ""){
+		params.allFields = new RegExp (afVal, 'i'); // all fields search	
+	}
+    ft.fetchTable(mainTableObj, params);
+}
+
+exports.getSearchQuery = function(mainTableObj){
+	let query = {};
+	for (let i in mainTableObj.advSearchFields){
+		let val = mainTableObj.advSearchFields[i].val();
+		if (val != ""){
+			query[i] = {
+				re: new RegExp(val, 'i'),
+				not: mainTableObj.advSearchFields[i].next().prop('checked')
+			};
+		}
+	}
+	return query;
+}
 
 
 

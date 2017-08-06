@@ -1,3 +1,28 @@
+Left To Do:
+- scratch paper tab
+- garden notebook
+- graphing
+
+- multi add range
+- help guide
+- options
+
+- get weather
+- planting calculator
+- harvest tracker
+
+- search by date range
+
+
+Maybes
+? when a planting or seeding task is added, assign that crop to that row
+? when task form garden and row are selected, if there is a crop in that row, select it automatically
+
+
+
+
+
+
 Notes To Me:
 
 
@@ -37,6 +62,7 @@ Q: what rows have been weeded in the last month?
 A: search tasks where tasktype == weeding and date == last month, sort by rows (rows will appear multiple times, but still ok)
 
 Q: what rows have NOT been weeded in the last month?
+A: 
 A: search tasks where tasktype == weeding and date == last month, sort by rows, look for rows not present (a really bad solution)
 
 Q: which row was weeded last?
@@ -78,4 +104,14 @@ js - database.js
    			- rows -
    			- tasks -
 
-I will try to use as little jquery as possible. but this is less important than the other parts. I only really need it for the date picker.
+==Database Managemnt==
+
+-datastore will hold a temp memory version of the database.
+-it will 'refresh' on startup before fetching the tables, and also whenever an item is added or deleted.
+-'fetchTable' will occur on startup after refreshing, and after searches and tab clicks
+
+
+
+
+
+

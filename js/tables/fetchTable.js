@@ -1,4 +1,4 @@
-let getTableHTML = function(mainTableObj, docs, params, idData){ // used in fetchTable()
+let getTableHTML = function(mainTableObj, docs, params){ // used in fetchTable()
 	// Add New Item Btn
     let html = "<div class='add-new-item ui-button flt-r mr'>Add New "+mainTableObj.title+"</div>";
     // Add Table Title
@@ -8,9 +8,11 @@ let getTableHTML = function(mainTableObj, docs, params, idData){ // used in fetc
     // Add each table header
     let visFields = mainTableObj.fieldsData.filter( d=> !d.noAppear ); // use only field data that is meant to appear
     visFields.forEach( (field)=>{ 
-    	html += "<th data-sorter='"+field.n+"'";
+    	html += "<th ";
         html += field.tt ? " title='"+field.tt+"'" : "";
-        html += ">" + field.t + "</th>";
+        html += "><span data-sorter='"+field.n+"'>" + field.t + "</span>";
+        html += field.adding ? "<span class='add-col' data-adder='"+field.n+"'>+</span>" : "";
+        html += "</th>";
      } );
     // End Table Head
     html += "</tr></thead><tbody>";
@@ -31,15 +33,7 @@ let getTableHTML = function(mainTableObj, docs, params, idData){ // used in fetc
     		html += (f === 0 ? ' data-edit="'+doc._id+'" title="edit" ' : '');
     		html += (field.c ? ' class="'+field.c+'" ' : '');
     		html += '>';
-    		if ( field.isID ){ // is id, get name from id
-    			let arr = idData[field.isID];
-    			let id = doc[field.n];
-    			let relatedDoc = findByID(arr, id)
-    			html += relatedDoc ? relatedDoc.name : "";
-    			
-    		} else { // if name, use name
-    			html += doc[field.n] || '';	
-    		}
+    		html += doc[field.n] || '';
     		html += '</span></td>';
     	} );
     	html += '</tr>'; // close row
@@ -50,77 +44,114 @@ let getTableHTML = function(mainTableObj, docs, params, idData){ // used in fetc
     
 }
 
-// Fetch Table Function //
-exports.fetchTable = function(database, mainTableObj, params={}){
-	// Set Up parameters for DB call
-	let query = params.query || {};
-	let idData = {};
-	let callback = function(docs){ // this will happen once all ID data is gotten
-		// store search history
-		mainTableObj.lastSearch = params;
-		mainTableObj.lastResults = docs;
-
-		// SORT
-	    docs = t.sort(mainTableObj, params, docs);
-
-	    // All Fields Search
-	    if (params.allFields){ // only keep docs in which one or more of the field values matches the regexp
-	    	docs = docs.filter( (doc)=>{ 
-	    		for( let prop in doc ){ 
-	    			if ( params.allFields.test( doc[prop] ) ){
-	    				return true;
-	    			}
-	    		}
-	    		return false;
-	    	} );
-	    }
-
-	    // Create Table HTML
-	    let html = getTableHTML(mainTableObj, docs, params, idData);
-
-    	// Show Table HTML
-	    mainTableObj.tableElem.html( html );
-
-	    // Click to open add form
-    	$(mainTableObj.panelID+' .add-new-item').click( ()=>{ mainTableObj.addForm.J.dialog("open"); } );
-
-    	// Click to open edit form
-    	$(mainTableObj.panelID+' [data-edit]').click( function(){ 
-    		let id = $(this).attr('data-edit');
-    		t.editItem(mainTableObj, id)
-    	 } );
-
-    	// Click to sort
-    	$(mainTableObj.panelID+" [data-sorter]").click( function(){
-    		let params = mainTableObj.lastSearch;
-		    params.sortBy = $(this).attr('data-sorter');
-		    ft.fetchTable(mainTableObj.db, mainTableObj, params );
-    	} );
-	} // callback function complete
-
-	// check if there will be IDs to fill
-    if ( mainTableObj.fieldsMetaData && mainTableObj.fieldsMetaData.idFields ){
-    	// if so, get idData for each one
-    	let idFields = mainTableObj.fieldsMetaData.idFields;
-    	idFields.forEach( (idField)=>{ // prepare idData obj
-    		idData[idField] = false; // make each property == false. when each prop becomes true, the data is ready
-    	} );
-    	for (let field in idData){ // get idData for each field in idData
-    		db.getItems(db.list[field+'DB'], (data)=>{
-    			idData[field] = data;
-    			if ( noFalse(idData) ){ // if all data is ready, get the items
-    				db.getItems( database, callback, query);
-    			}
-    		}, {});
-    	}
-    } else {
-    	// just call to DB normally, don't bother getting ID data.
-    	db.getItems( database, callback, query);
+// Fetch Table Function // (datastore assumed to be up to date)
+exports.fetchTable = function(mainTableObj, params={}){
+    
+    // Fill in human-readable text into ID fields //
+    
+    let data = JSON.parse(JSON.stringify(db.datastore[mainTableObj.name]));
+    if (mainTableObj.fieldsMetaData && mainTableObj.fieldsMetaData.idFields){ // if it has id fields
+        data.forEach( (item, i)=>{ // for each item,
+            mainTableObj.fieldsData.forEach( (fieldData)=>{ // for each field,
+                if ( /ID/.test(fieldData.n) ){  // if it is an id field,
+                    if (item[fieldData.n]){ // if that field isn't blank
+                        // get the referenced db
+                        let refDB = db.datastore[fieldData.n.replace('ID', '')];
+                        // get the referenced item
+                        let refItem = findByID(refDB, item[fieldData.n]); // item[fieldData.n] is the id string
+                        if ( refItem ){
+                            // get the human-readable string //
+                            let hrStr;
+                            if (typeof fieldData.shows == 'string'){
+                                hrStr = refItem[fieldData.shows];
+                            } else if (typeof fieldData.shows == 'function') {
+                                hrStr = fieldData.shows(refItem);
+                            } else {
+                                hrStr = refItem['name'];
+                            }
+                            
+                            data[i][fieldData.n] = hrStr || "none";
+                        }
+                    }
+                }
+            } );
+        } );
     }
 
+    // Sort //
 
-	
-	
+    data = t.sort(mainTableObj, params, data);
+
+    // Search Filter //
+
+    // All Fields Search
+    if (params.allFields){ // only keep data in which one or more of the field values matches the regexp
+        data = data.filter( (item)=>{ 
+            for( let prop in item ){ 
+                if ( params.allFields.test( item[prop] ) ){
+                    return true;
+                }
+            }
+            return false;
+        } );
+    }
+
+    // Search By Field
+    if (params.query){
+        for (let prop in params.query){ // for each specified search query
+            data = data.filter( (item)=>{ // filter for matches
+                if ( params.query[prop].re.test(item[prop]) ){
+                    if (params.query[prop].not){
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } 
+                else { 
+                    if (params.query[prop].not){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            } );
+        }
+    }
+
+    // Store History //
+ 
+    mainTableObj.lastSearch = params;
+    mainTableObj.lastResults = data;
+
+    // Get Table HTML //
+    let html = getTableHTML(mainTableObj, data, params);
+    mainTableObj.tableElem.html( html );
+
+    // Add Clicks //
+
+    // Click to open add form
+    $(mainTableObj.panelID+' .add-new-item').click( ()=>{ mainTableObj.addForm.J.dialog("open"); } );
+
+    // Click to open edit form
+    $(mainTableObj.panelID+' [data-edit]').click( function(){ 
+        let id = $(this).attr('data-edit');
+        t.editItem(mainTableObj, id)
+     } );
+
+    // Click to sort
+    $(mainTableObj.panelID+" [data-sorter]").click( function(){
+        let params = mainTableObj.lastSearch;
+        params.sortBy = $(this).attr('data-sorter');
+        ft.fetchTable(mainTableObj, params );
+    } );
+
+    // Click to add col
+    $(mainTableObj.panelID+" .add-col").click( function(){
+        let field = $(this).attr('data-adder');
+        let sum = 0;
+        mainTableObj.lastResults.forEach( (item)=>{ sum += Number(item[field]) } );
+        alert('Total: '+sum);
+    } );
 } // end showTable()
 
 noFalse = function(obj){ // checks that each property is not false
@@ -128,13 +159,7 @@ noFalse = function(obj){ // checks that each property is not false
 	return true;
 }
 
-findByID = function(arr, id){
-	for (var i = 0; i < arr.length; i++) {
-		if (arr[i]._id == id){
-			return arr[i];
-		}
-	};
-}
+
 
 
 

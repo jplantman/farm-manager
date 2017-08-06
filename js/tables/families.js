@@ -1,11 +1,12 @@
 "use strict"
 
-
 // Main Table Obj
 const families = {};
 
 // Store Common Things into Variables //
 families.title = "Family";
+families.name = "family";
+families.tabElem = $('a[href="#family"]');
 families.panelID = "#family";
 families.panelElem = $('#family');
 families.tableElem = $('#families-table');
@@ -104,6 +105,7 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   families.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
@@ -128,31 +130,15 @@ $('#family .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#family .search-bar').on('input', function(){
-	let params = {
- 		query: families.getSearchQuery() // advanced query
-	}
-	let afVal = families.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
-    ft.fetchTable(families.db, families, params);
-} );
-
-families.getSearchQuery = function(){
-	let query = {};
-	for (let i in families.advSearchFields){
-		let val = families.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(families.panelID+' .search-bar').on('input', ()=>{ t.search(families) } );
+$(families.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(families) } );
 
 // Initially Fetch Table //
-ft.fetchTable(families.db, families, {sortBy: 'name'} );
+ft.fetchTable(families, {sortBy: 'name'} );
 
+families.tabElem.click( ()=>{
+	ft.fetchTable(families, {sortBy: 'name'} );
+} );
 
 
 

@@ -1,11 +1,11 @@
 "use strict"
 
-
 // Main Table Obj
 const crops = {};
 
 // Store Common Things into Variables //
 crops.title = "Crop";
+crops.name = "crop";
 crops.tabElem = $('[href="#crop"]');
 crops.panelID = "#crop";
 crops.panelElem = $('#crop');
@@ -19,7 +19,7 @@ crops.fieldsData = [
 	{ n: 'name', t: 'Name', l: [3, 20], linkBefore: true},
 	{ n: 'variety', t: 'Variety', l: [0, 49]},
 	{ n: 'latinName', t: 'Latin Name', l: [0, 49], c: 'italics', fc: 'italics'},
-	{ n: 'familyID', t: 'Family', isID: 'family'},
+	{ n: 'familyID', t: 'Family', isID: 'family', shows: 'name'},
 	{ n: 'spacing', t: 'Spacing', lc: 'mt'},
 	{ n: 'dtm', t: 'D.T.M.', tt: 'days to maturity'},
 	{ n: 'notes', t: 'Notes'},
@@ -90,7 +90,6 @@ quickAddElem.change(function(){
   var item = quickAdd[quickAddElem.val()];
   if (item){
   	for( let i in crops.addForm.fieldElems ){
-  		console.log(crops.addForm.fieldElems, i);
   		crops.addForm.fieldElems[i].val(item[i] || "");
   	}
   }
@@ -148,6 +147,7 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   crops.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
@@ -172,30 +172,11 @@ $('#crop .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#crop .search-bar').on('input', function(){
-	let params = {
- 		query: crops.getSearchQuery() // advanced query
-	}
-	let afVal = crops.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
-    ft.fetchTable(crops.db, crops, params);
-} );
-
-crops.getSearchQuery = function(){
-	let query = {};
-	for (let i in crops.advSearchFields){
-		let val = crops.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(crops.panelID+' .search-bar').on('input', ()=>{ t.search(crops) } );
+$(crops.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(crops) } );
 
 // Initially Fetch Table //
-ft.fetchTable(crops.db, crops, {sortBy: 'name'} );
+ft.fetchTable(crops, {sortBy: 'name'} );
 
 // familyID select menu
 t.getSelectMenuOptions(crops.addFormID, 'family');
@@ -203,6 +184,7 @@ t.getSelectMenuOptions(crops.editFormID, 'family');
 
 // Tab On Click
 crops.tabElem.click( ()=>{
+	ft.fetchTable(crops, {sortBy: 'name'} );
 	t.getSelectMenuOptions(crops.addFormID, 'family');
 	t.getSelectMenuOptions(crops.editFormID, 'family');
 } );

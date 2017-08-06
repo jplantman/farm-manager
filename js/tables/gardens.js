@@ -1,11 +1,12 @@
 "use strict"
 
-
 // Main Table Obj
 const gardens = {};
 
 // Store Common Things into Variables //
 gardens.title = "Garden";
+gardens.name = "garden";
+gardens.tabElem = $('a[href="#garden"]');
 gardens.panelID = "#garden";
 gardens.panelElem = $('#garden');
 gardens.tableElem = $('#gardens-table');
@@ -97,6 +98,7 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   gardens.fieldsData.forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
@@ -121,30 +123,15 @@ $('#garden .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#garden .search-bar').on('input', function(){
-	let params = {
- 		query: gardens.getSearchQuery() // advanced query
-	}
-	let afVal = gardens.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
- ft.fetchTable(gardens.db, gardens, params);
-} );
-
-gardens.getSearchQuery = function(){
-	let query = {};
-	for (let i in gardens.advSearchFields){
-		let val = gardens.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(gardens.panelID+' .search-bar').on('input', ()=>{ t.search(gardens) } );
+$(gardens.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(gardens) } );
 
 // Initially Fetch Table //
-ft.fetchTable(gardens.db, gardens, {sortBy: 'name'} );
+ft.fetchTable(gardens, {sortBy: 'name'} );
+
+gardens.tabElem.click( ()=>{
+	ft.fetchTable(gardens, {sortBy: 'name'} );
+} );
 
 
 

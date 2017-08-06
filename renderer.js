@@ -2,35 +2,49 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+window.findByID = function(arr, id){
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i]._id == id){
+			return arr[i];
+		}
+	};
+}
 
 window.$ = window.jQuery = require('./resources/jquery-3.1.1.min.js');
-require('./resources/jquery-ui-1.12.1/jquery-ui.min.js');
 
+require('./resources/jquery-ui-1.12.1/jquery-ui.min.js');
+$( "#tabs" ).tabs();
+
+// to open links in default browser
+const shell = require('electron').shell;
 
 require('./js/dateTime.js');
 
 db = require('./js/database.js');
-db.refreshDatastore( ()=>{ console.log(db.datastore) } );
-t = require('./js/tables/tables.js');
-ft = require('./js/tables/fetchTable.js');
 
-require('./js/tables/gardens.js');
-require('./js/tables/families.js');
-require('./js/tables/taskTypes.js');
+db.refreshDatastore( ()=>{
 
-require('./js/tables/workers.js');
-require('./js/tables/crops.js');
-require('./js/tables/rows.js');
-require('./js/tables/tasks.js');
+	t = require('./js/tables/tables.js');
+	ft = require('./js/tables/fetchTable.js');
+
+	require('./js/tables/gardens.js');
+	require('./js/tables/families.js');
+	require('./js/tables/taskTypes.js');
+
+	require('./js/tables/workers.js');
+	require('./js/tables/crops.js');
+	require('./js/tables/rows.js');
+	require('./js/tables/tasks.js');
+
+	$( ".datepicker").datepicker({ changeMonth: true, changeYear: true, dateFormat: "dd M, yy" });
+	$( document ).tooltip();
+
+} );
 
 
-// Jquery UI
-$( "#tabs" ).tabs();
-$( ".datepicker").datepicker({ changeMonth: true, changeYear: true, dateFormat: "dd M, yy" });
-$( document ).tooltip();
 
-// to open links in default browser
-const shell = require('electron').shell;
+
+
 
 // assuming $ is jQuery
 $(document).on('click', 'a[href^="http"]', function(event) {

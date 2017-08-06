@@ -1,13 +1,14 @@
 "use strict"
 
-
 // Main Table Obj
 const taskTypes = {};
 
 // Store Common Things into Variables //
 taskTypes.title = "Task Type";
-taskTypes.tabID = "#taskType";
-taskTypes.tabElem = $('#taskType');
+taskTypes.name = "taskType";
+taskTypes.tabElem = $('a[href="#taskType"]');
+taskTypes.panelID = "#taskType";
+taskTypes.panelElem = $('#taskType');
 taskTypes.tableElem = $('#taskTypes-table');
 taskTypes.addFormID = "#taskType-form";
 taskTypes.addForm = $("#taskType-form");
@@ -97,11 +98,12 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   taskTypes.fieldsData.forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
   // insert html
-taskTypes.tabElem.prepend(html);
+taskTypes.panelElem.prepend(html);
   //get elements
 taskTypes.advSearchFieldsArea = $('#taskType .adv-search-fields');
 taskTypes.allFieldsSearchElem = $('#taskType [data-query="allFields"]');
@@ -121,32 +123,15 @@ $('#taskType .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#taskType .search-bar').on('input', function(){
-	let params = {
- 		query: taskTypes.getSearchQuery() // advanced query
-	}
-	let afVal = taskTypes.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
- ft.fetchTable(taskTypes.db, taskTypes, params);
-} );
-
-taskTypes.getSearchQuery = function(){
-	let query = {};
-	for (let i in taskTypes.advSearchFields){
-		let val = taskTypes.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(taskTypes.panelID+' .search-bar').on('input', ()=>{ t.search(taskTypes) } );
+$(taskTypes.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(taskTypes) } );
 
 // Initially Fetch Table //
-ft.fetchTable(taskTypes.db, taskTypes, {sortBy: 'name'} );
+ft.fetchTable(taskTypes, {sortBy: 'name'} );
 
-
+taskTypes.tabElem.click( ()=>{
+	ft.fetchTable(taskTypes, {sortBy: 'name'} );
+} )
 
 
 

@@ -1,11 +1,11 @@
 "use strict"
 
-
 // Main Table Obj
 const rows = {};
 
 // Store Common Things into Variables //
 rows.title = "Row";
+rows.name = "row";
 rows.tabElem = $('a[href="#row"]');
 rows.panelID = "#row";
 rows.panelElem = $('#row');
@@ -16,8 +16,8 @@ rows.editFormID = "#row-edit-form";
 rows.editForm = $("#row-edit-form");
 rows.db = db.list.rowDB;
 rows.fieldsData = [
-	{ n: 'name', t: 'Name', l: [1, 40]},
-	{ n: 'gardenID', t: 'Garden', isID: 'garden'},
+	{ n: 'name', t: 'Name', l: [1, 999]},
+	{ n: 'gardenID', t: 'Garden', isID: 'garden', shows: 'name'},
 	{ n: 'notes', t: 'Notes'}
 ];
 rows.fieldsMetaData = {
@@ -120,6 +120,7 @@ html = '<input class="search-bar" data-query="allFields" placeholder="Search in 
 	   '<div class="adv-search-fields">';
 	   rows.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
 	   	html += '<input class="search-bar" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
+	   	+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
 	   } );
 
 html += '</div>';
@@ -144,33 +145,15 @@ $('#row .adv-search-btn').click( ()=>{
 
 
 // type to search
-$('#row .search-bar').on('input', function(){
-	let params = {
- 		query: rows.getSearchQuery() // advanced query
-	}
-	let afVal = rows.allFieldsSearchElem.val();
-	if (afVal != ""){
-		params.allFields = new RegExp (afVal, 'i'); // all fields search	
-	}
-    ft.fetchTable(rows.db, rows, params);
-} );
-
-rows.getSearchQuery = function(){
-	let query = {};
-	for (let i in rows.advSearchFields){
-		let val = rows.advSearchFields[i].val();
-		if (val != ""){
-			query[i] = new RegExp(val, 'i');
-		}
-	}
-	return query;
-}
+$(rows.panelID+' .search-bar').on('input', ()=>{ t.search(rows) } );
+$(rows.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(rows) } );
 
 // Initially Fetch Table //
-ft.fetchTable(rows.db, rows, {sortBy: 'name'} );
+ft.fetchTable(rows, {sortBy: 'name'} );
 
 // Tab On Click
 rows.tabElem.click( ()=>{
+	ft.fetchTable(rows, {sortBy: 'name'} );
 	t.getSelectMenuOptions(rows.addFormID, 'garden');
 	t.getSelectMenuOptions(rows.editFormID, 'garden');
 } );
