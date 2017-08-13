@@ -32,7 +32,7 @@ crops.fieldsMetaData = {
 // Store Temp Data //
 crops.lastSearch = {};
 crops.lastAFSearch;
-crops.lastResults = [];
+crops.lastResults = db.datastore.crops;
 crops.lastSort = '';
 
 // ADD FORM // 
@@ -142,7 +142,8 @@ crops.editForm.J = crops.editForm.dialog({
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   crops.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
@@ -189,7 +190,8 @@ crops.tabElem.click( ()=>{
 	t.getSelectMenuOptions(crops.editFormID, 'family');
 } );
 
-
+// Delete all items showing button
+t.deleteAllBtn(crops);
 
 
 

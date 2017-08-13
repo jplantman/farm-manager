@@ -16,7 +16,7 @@ gardens.editFormID = "#garden-edit-form";
 gardens.editForm = $("#garden-edit-form");
 gardens.db = db.list.gardenDB;
 gardens.fieldsData = [
-	{n: 'name', t: 'Name', l: [1, 20]},
+	{n: 'name', t: 'Name', l: [1, 55]},
 	{n: 'desc', t: 'Description', l: [0, 255]},
 	{n: 'notes', t: 'Notes', l: [0, 255]}
 ];
@@ -24,7 +24,7 @@ gardens.fieldsData = [
 // Store Temp Data //
 gardens.lastSearch = {};
 gardens.lastAFSearch;
-gardens.lastResults = [];
+gardens.lastResults = db.datastore.gardens;
 gardens.lastSort = '';
 
 // ADD FORM // 
@@ -93,7 +93,8 @@ gardens.editForm.J = gardens.editForm.dialog({
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   gardens.fieldsData.forEach( (f)=>{
@@ -133,7 +134,8 @@ gardens.tabElem.click( ()=>{
 	ft.fetchTable(gardens, {sortBy: 'name'} );
 } );
 
-
+// Delete all items showing button
+t.deleteAllBtn(gardens);
 
 
 

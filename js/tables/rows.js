@@ -17,7 +17,8 @@ rows.editForm = $("#row-edit-form");
 rows.db = db.list.rowDB;
 rows.fieldsData = [
 	{ n: 'name', t: 'Name', l: [1, 999]},
-	{ n: 'gardenID', t: 'Garden', isID: 'garden', shows: 'name'},
+	{ n: 'gardenID', t: 'Garden', isID: 'garden', shows: 'name', l: [1, 255]},
+	{ n: 'cropID', t: 'Current Crops', isID: 'crop', shows: 'name'},
 	{ n: 'notes', t: 'Notes'}
 ];
 rows.fieldsMetaData = {
@@ -27,7 +28,7 @@ rows.fieldsMetaData = {
 // Store Temp Data //
 rows.lastSearch = {};
 rows.lastAFSearch;
-rows.lastResults = [];
+rows.lastResults = db.datastore.rows;
 rows.lastSort = '';
 
 // ADD FORM // 
@@ -42,11 +43,13 @@ let html =
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
 	      	html += t.fillTemplate(rows.fieldsData.slice(0, 1), template);
 
-	      	html += "<label for=gardenID>Garden</label><select name='gardenID' class='mb-s'></select>"
+	      	html += "<label for=gardenID>Garden</label><select name='gardenID' class='mb-s'></select>";
+
+	      	html += "<label for=cropID>Current Crops</label><select name='cropID' class='mb-s'></select>"
 
 	      	template = '<label for="{{n}}">{{t}}</label>'+
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
-	      	html += t.fillTemplate(rows.fieldsData.slice(2), template);
+	      	html += t.fillTemplate(rows.fieldsData.slice(3), template);
 	      
 html +=	      
 	    '</fieldset>'+
@@ -112,10 +115,13 @@ rows.editForm.J = rows.editForm.dialog({
 // gardenID select menu
 t.getSelectMenuOptions(rows.addFormID, 'garden');
 t.getSelectMenuOptions(rows.editFormID, 'garden');
+t.getSelectMenuOptions(rows.addFormID, 'crop');
+t.getSelectMenuOptions(rows.editFormID, 'crop');
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   rows.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
@@ -156,9 +162,12 @@ rows.tabElem.click( ()=>{
 	ft.fetchTable(rows, {sortBy: 'name'} );
 	t.getSelectMenuOptions(rows.addFormID, 'garden');
 	t.getSelectMenuOptions(rows.editFormID, 'garden');
+	t.getSelectMenuOptions(rows.addFormID, 'crop');
+	t.getSelectMenuOptions(rows.editFormID, 'crop');
 } );
 
-
+// Delete all items showing button
+t.deleteAllBtn(rows);
 
 
 

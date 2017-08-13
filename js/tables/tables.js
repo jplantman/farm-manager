@@ -9,27 +9,12 @@ function lowercase(str){
 	return str;
 }
 
-function compareDate(a, b, gt){ // gt = greater than; if not true, less than
-	a = a.split(/,? /);
-	b = b.split(/,? /);
-	// compare years
-	if (a[2] > b[2]){
-		return gt ? true : false;
-	} else if (a[2] < b[2]){
-		return gt ? false : true;
-	}
-	// compare months
-	let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-	if ( months.indexOf(a[1]) > months.indexOf(b[1]) ){
-		return gt ? true : false;
-	} else if ( months.indexOf(a[1]) < months.indexOf(b[1]) ){
-		return gt ? false : true;
-	}
-	// compare day
-	if (a[0] > b[0]){
-		return gt ? true : false;
+exports.dateToNum = function(dateStr){
+	// check if valid date
+	if (/^[0-9][0-9] (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec), [0-9][0-9][0-9][0-9]$/.test(dateStr)){
+		return new Date(dateStr).getTime();
 	} else {
-		return true;
+		return 0
 	}
 }
 
@@ -40,12 +25,12 @@ exports.sort = function(mainTableObj, params, data){
 	if (params.sortBy){ // if params include soryBy,
       if (mainTableObj.lastSort == params.sortBy){ // if last sorted in this way, sort in reverse order
         data.sort( (a, b)=>{ 
-        	return  !isDate ? lowercase(a[params.sortBy]) < lowercase(b[params.sortBy]) : compareDate(a[params.sortBy], b[params.sortBy], false);
+        	return  !isDate ? lowercase(a[params.sortBy]) < lowercase(b[params.sortBy]) : t.dateToNum(a[params.sortBy]) < t.dateToNum(b[params.sortBy]) ;
         } );
         mainTableObj.lastSort = null; // clear sort history
       } else { // else, sort in normal order
         data.sort( (a, b)=>{ 
-        	return !isDate ? lowercase(a[params.sortBy]) > lowercase(b[params.sortBy]) : compareDate(a[params.sortBy], b[params.sortBy], true);
+        	return !isDate ? lowercase(a[params.sortBy]) > lowercase(b[params.sortBy]) : t.dateToNum(a[params.sortBy]) > t.dateToNum(b[params.sortBy]) ;
         } );
         mainTableObj.lastSort = params.sortBy;
       }
@@ -96,7 +81,7 @@ exports.addItem = function(mainTableObj, formStr, multiAdd ){
   	if (multiAdd){
   		newItem[ multiAdd[0] ] = multiAdd[1];
   	}
-
+  	console.log('adding item', newItem);
     db.addItem( mainTableObj.db, newItem, (newItem)=>{
       let params = JSON.parse( JSON.stringify(mainTableObj.lastSearch) );
       params.highlight = newItem._id;
@@ -114,6 +99,9 @@ exports.clear = function(mainTableObj, formStr){
 		mainTableObj[formStr].fieldElems[prop].val("");
 		mainTableObj.addForm.tipsElem.html("");
 		mainTableObj.editForm.tipsElem.html("");
+		// if (mainTableObj[formStr].fieldElems[prop][0].checked){
+		// 	mainTableObj[formStr].fieldElems[prop][0].checked = false;
+		// }
 	}
 }
 
@@ -168,8 +156,7 @@ exports.deleteItem = function(mainTableObj){
 
 			let conf = confirm("Are you sure you want to delete this "+mainTableObj.title+"?");
 			if (!conf){ return }
-
-			
+			let params = JSON.parse( JSON.stringify(mainTableObj.lastSearch) );
 			db.deleteItem(database, id, ()=>{
 		        db.refreshDatastore( ()=>{
 			    	ft.fetchTable(mainTableObj, params );	
@@ -201,7 +188,28 @@ exports.getSelectMenuOptions = function(thisForm, otherTable, showFunc, callback
 	}
 }
 
-
+exports.deleteAllBtn = function(mainTableObj){
+	$(mainTableObj.panelID+' .delete-all-showing').click( ()=>{ 
+        let arr = [];
+        mainTableObj.lastResults.forEach( (item)=>{
+            if (!item.noDelete){
+                arr.push( {_id: item._id} );
+            }
+        } );
+        if (arr.length === 0){ alert("This deletes all the items showing. But there are no items showing!"); return; }
+        if ( !confirm("Really delete ALL items showing? This cannot be undone!") ){ return; }
+        if (arr.length >= 1){
+            db.deleteItems(mainTableObj.db, arr, ()=>{
+                db.refreshDatastore( ()=>{
+                	let params = JSON.parse( JSON.stringify(mainTableObj.lastSearch) );
+                    ft.fetchTable(mainTableObj, params );   
+                } );
+            });
+        } else {
+            alert("These items can't be deleted");
+        }
+    } );
+}
 
 
 
@@ -255,9 +263,14 @@ let updateTips = function(tipText, tipElem){ // update validate tips
 
 // Search Functions //
 
-exports.search = function(mainTableObj){
+exports.search = function(mainTableObj, extraParams){
 	let params = {
  		query: t.getSearchQuery(mainTableObj) // advanced query
+	}
+	if ( extraParams ){ // extra search params (like after and before dates)
+		for (let prop in extraParams){
+			params[prop] = extraParams[prop];
+		}
 	}
 	let afVal = mainTableObj.allFieldsSearchElem.val();
 	if (afVal != ""){

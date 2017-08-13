@@ -17,16 +17,17 @@ tasks.editForm = $("#task-edit-form");
 tasks.db = db.list.taskDB;
 tasks.fieldsData = [
 	{ n: 'date', t: 'Date', fc: 'datepicker', l:[1, 63] },
-	{ n: 'time', t: 'Time (hours)', l:[1, 63], adding: true },
-	{ n: 'taskTypeID', t: 'Task Type', isID: 'taskType', l:[1, 63], shows: 'name'},
+	{ n: 'time', t: 'Time (hours)', l:[0, 63], adding: true },
+	{ n: 'taskTypeID', t: 'Task Type', isID: 'taskType', shows: 'name'},
 	{ n: 'gardenID', t: 'Garden', isID: 'garden', shows: 'name'},
 	{ n: 'rowID', t: 'Row', isID: 'row', shows: 'name'},
 	{ n: 'cropID', t: 'Crop', isID: 'crop', shows: (item)=>{
 		return item.name + (item.variety ? ", "+item.variety : '') ;
 	}},
-	{ n: 'amount', t: 'Amount', adding: true},
-	{ n: 'workerID', t: 'Worker', isID: 'worker', l:[1, 63], shows: 'name'},
-	{ n: 'notes', t: 'Notes'}
+	{ n: 'amount', t: 'Amount', adding: true, l:[0, 63]},
+	{ n: 'workerID', t: 'Worker', isID: 'worker', l:[0, 63], shows: 'name'},
+	{ n: 'notes', t: 'Notes', l:[0, 255]},
+	{ n: 'status', t: 'Status'}
 ];
 tasks.fieldsMetaData = {
 	idFields: ['taskType', 'row', 'crop', 'worker']
@@ -35,7 +36,7 @@ tasks.fieldsMetaData = {
 // Store Temp Data //
 tasks.lastSearch = {};
 tasks.lastAFSearch;
-tasks.lastResults = [];
+tasks.lastResults = db.datastore.tasks;
 tasks.lastSort = '';
 
 // ADD FORM // 
@@ -50,7 +51,7 @@ let html =
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
 	      	html += t.fillTemplate(tasks.fieldsData.slice(0, 2), template);
 
-	      	html += "<label for=taskTypeID>Task Type</label><select name='taskTypeID' class='mb-s'></select>";
+	      	html += "<label for=taskTypeID>Task Type</label><select multiselect name='taskTypeID' class='mb-s'></select>";
 	      	html += "<label for=gardenID>Garden</label><select name='gardenID' class='mb-s'></select>";
 	      	html += "<label for=rowID>Row</label><select name='rowID' class='mb-s'></select>";
 	      	html += "<label for=cropID>Crop</label><select name='cropID' class='mb-s'></select>";
@@ -63,7 +64,13 @@ let html =
 
 	      	template = '<label for="{{n}}">{{t}}</label>'+
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
-	      	html += t.fillTemplate(tasks.fieldsData.slice(8), template);
+	      	html += t.fillTemplate(tasks.fieldsData.slice(8, 9), template);
+	      	template = "<label for='{{n}}'>{{t}}</label><select name='{{n}}'>"+
+	      				"<option>Not Started</option>"+
+	      				"<option>In Progress</option>"+
+	      				"<option>Done</option>"
+	      				"</select>";
+	      	html += t.fillTemplate(tasks.fieldsData.slice(9, 10), template);
 	      
 html +=	      
 	    '</fieldset>'+
@@ -84,12 +91,10 @@ tasks.addForm.J = tasks.addForm.dialog({
 	    	"Add Task": ()=>{ t.addItem(tasks, "addForm") },
 	    	Cancel: ()=>{
 	    		t.clear(tasks, 'addForm');
-	    		$('#quickAdd').val('initial');
 	    		tasks.addForm.J.dialog('close');
 	    	},
 	    	Clear: ()=>{ 
 	    		t.clear(tasks, 'addForm');
-	    		$('#quickAdd').val('initial');
 	    	}
 	}
 });
@@ -168,9 +173,11 @@ tasks.manageSelectMenus = function(){
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
-	   '<div class="adv-search-fields">';
+	   '<div class="adv-search-fields">'+
+	   '<input class="datepicker input-short"  id="tasks-after" placeholder="Search for dates after..."/><input class="datepicker input-short" id="tasks-before" placeholder="Search for dates after..."/><br/>'
 	   tasks.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
 	   	html += '<input class="search-bar width-long" data-query="'+f.n+'" placeholder="Search by '+f.t+'" />'
 	   		+ '<input type="checkbox" data-not="'+f.n+'" title="search for NOT this"/><br/>';
@@ -196,10 +203,21 @@ $('#task .adv-search-btn').click( ()=>{
 	// }
 } );
 
+// Get After/Before Search params
+tasks.getExtraParams = function(){
+	let params = {};
+	if ( $('#tasks-after').val() ){
+		params.after = $('#tasks-after').val();
+	}
+	if ( $('#tasks-before').val() ){
+		params.before = $('#tasks-before').val();
+	}
+	return params;
+}
 
 // type to search
-$(tasks.panelID+' .search-bar').on('input', ()=>{ t.search(tasks) } );
-$(tasks.panelID+' [type="checkbox"]').on('change', ()=>{ t.search(tasks) } );
+$(tasks.panelID+' .search-bar').on('input', ()=>{ t.search(tasks, tasks.getExtraParams()) } );
+$(tasks.panelID+' [type="checkbox"], #tasks-after, #tasks-before').on('change', ()=>{ t.search(tasks, tasks.getExtraParams()) } );
 
 
 
@@ -216,7 +234,8 @@ tasks.tabElem.click( ()=>{
 	tasks.manageSelectMenus();
 } );
 
-
+// Delete all items showing button
+t.deleteAllBtn(tasks);
 
 
 

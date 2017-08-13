@@ -1,5 +1,30 @@
 Left To Do:
-- scratch paper tab
+
+- Integrate Rows And Crops
+   - rows should have a crop field. 
+   - they should allow for an array of crops.
+   - tasks like direct seeding or transplanting should automatically add a crop to a row. 
+   - tasks like harvesting or clearing a row should allow a user to mark a row as complete. 
+   - these tasks can be color-coded - green and red for tasks that start and clear a crop in a row. 
+   - tasks that start a crop can be of any crop, but maintenance tasks like harvesting, weeding, etc, can only be for crops that exist in that row.
+
+- greenhouse seeding tasks should keep track of whether the seedings have been planted out yet or not. seedlings that have not  been transplanted out yet should quickly show in a section of the home screen.
+
+- tips section with different tips appearing
+
+- Home Screen
+   - Tasks To-Do Tab
+      - should have a section that lists tasks whose dates are from today till next week (or month, optionally)
+      - these tasks should be in a condensed, easy-to-scan format
+      - you should be able to easily edit the properties to show that it was completed, by who, and the time it took, and notes.
+
+   - Quick searches: should have buttons to automatically search for common searches, including:
+      - what GH seedling tasks are not yet marked as transplanted.
+         ( maybe this should be included in a window of its own, in the home area )
+      - what crops need harvesting
+      - what rows might need weeding or watering
+
+- weather record
 - garden notebook
 - graphing
 
@@ -11,12 +36,19 @@ Left To Do:
 - planting calculator
 - harvest tracker
 
+- cool css loading symbol
+- rounding for adder
+
+- add a 'worker currently employed' field
+- edit items showing / item editing should work at each field, changing the filed to an input, instead of a form? maybe?
+- adv search options up and down arrow
+
+- photo album with captions and tags for each thing
+
+
+Done: 
+- the part that shows the table should overflow: scroll, to allow for big tables.
 - search by date range
-
-
-Maybes
-? when a planting or seeding task is added, assign that crop to that row
-? when task form garden and row are selected, if there is a crop in that row, select it automatically
 
 
 

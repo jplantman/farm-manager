@@ -68,6 +68,10 @@ exports.deleteItem = function(db, id, callback){
 	db.remove({_id: id}, {}, callback);
 }
 
+exports.deleteItems = function(db, arr, callback){
+	db.remove({ $or: arr }, {multi: true}, callback);
+}
+
 exports.getItem = function(db, callback, searchTerms){
 	db.findOne( searchTerms, function(err, item){
 

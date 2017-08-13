@@ -10,20 +10,29 @@ window.findByID = function(arr, id){
 	};
 }
 
+// Error messages as alerts
+window.addEventListener("error", (err)=>{
+	alert(err.error.message+err.error.stack );
+}, true);
+
 window.$ = window.jQuery = require('./resources/jquery-3.1.1.min.js');
 
 require('./resources/jquery-ui-1.12.1/jquery-ui.min.js');
+require('./resources/multi-select/js/jquery.multi-select.js');
 $( "#tabs" ).tabs();
+$('.main-accordions').accordion({
+      collapsible: true
+    });
 
 // to open links in default browser
 const shell = require('electron').shell;
 
-require('./js/dateTime.js');
+require('./js/extras/dateTime.js');
+require('./js/extras/notes.js');
 
 db = require('./js/database.js');
 
 db.refreshDatastore( ()=>{
-
 	t = require('./js/tables/tables.js');
 	ft = require('./js/tables/fetchTable.js');
 
@@ -38,8 +47,14 @@ db.refreshDatastore( ()=>{
 
 	$( ".datepicker").datepicker({ changeMonth: true, changeYear: true, dateFormat: "dd M, yy" });
 	$( document ).tooltip();
+	$('#my-select').multiSelect({
+		afterSelect: function(){
+			console.log( $('#my-select').val() )
+		}
+	});
 
 } );
+
 
 
 

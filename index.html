@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" type="text/css" href="resources/jquery-ui-1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/multi-select/css/multi-select.dist.css">
 
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <link rel="stylesheet" type="text/css" href="css/elements.css">
@@ -61,6 +62,7 @@
       <main>
         <div id="tabs">
           <ul>
+            <li><a href="#home">Home</a></li>
             <li><a href="#crop">Crops</a></li>
             <li><a href="#family">Families</a></li>
             <li><a href="#row">Rows</a></li>
@@ -68,9 +70,38 @@
             <li><a href="#task">Tasks</a></li>
             <li><a href="#taskType">Task Types</a></li>
             <li><a href="#worker">Workers</a></li>
-            <li><a href="#notes">Notes</a></li>
             
           </ul>
+          <div id="home">
+            <h1>Farm Savers Farm Manager</h1>
+
+            <div class="main-to-do">
+              <select multiple="multiple" id="my-select" name="my-select[]">
+                <option value='elem_1'>elem 1</option>
+                <option value='elem_2'>elem 2</option>
+                <option value='elem_3'>elem 3</option>
+                <option value='elem_4'>elem 4</option>
+              </select>
+            </div>
+
+            <div class="main-accordions">
+              <h3>Weather</h3>
+              <div id="weather">Loading weather...</div>
+              <h3>Notes</h3>
+              <div id="notes">
+                <textarea></textarea>
+              </div>
+            </div>
+
+            <div class="main-buttons">
+              <div class='ui-button block'>Help Guide</div>
+              <div class='ui-button block'>Options</div>
+              <div class='ui-button block'>Get Weather</div>
+              <div class='ui-button block'>Planting Calculator</div>
+              <div class='ui-button block'>Harvest Tracker</div>
+              <div class='ui-button block'>Garden Notebook </div>
+            </div>
+          </div>
           <div id="crop">
             <div id="crops-table" class="mt">Loading...</div>
           </div>
@@ -92,23 +123,20 @@
           <div id="worker">
             <div id="workers-table" class="mt">Loading...</div>
           </div>
-          <div id="notes">
-            <textarea></textarea>
-          </div>
           
         </div>
 
 
       </main>
 
-      <sidebar class="center">
+      <!-- <sidebar class="center">
         <div class='ui-button block'>Help Guide</div>
         <div class='ui-button block'>Options</div>
         <div class='ui-button block'>Get Weather</div>
         <div class='ui-button block'>Planting Calculator</div>
         <div class='ui-button block'>Harvest Tracker</div>
         <div class='ui-button block'>Garden Notebook </div>
-      </sidebar>
+      </sidebar> -->
       
     </div> <!-- end .container -->
     

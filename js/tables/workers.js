@@ -25,7 +25,7 @@ workers.fieldsData = [
 // Store Temp Data //
 workers.lastSearch = {};
 workers.lastAFSearch;
-workers.lastResults = [];
+workers.lastResults = db.datastore.workers;
 workers.lastSort = '';
 
 // ADD FORM // 
@@ -94,7 +94,8 @@ workers.editForm.J = workers.editForm.dialog({
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   workers.fieldsData.forEach( (f)=>{
@@ -134,7 +135,8 @@ workers.tabElem.click( ()=>{
 	ft.fetchTable(workers, {sortBy: 'name'} );
 } )
 
-
+// Delete all items showing button
+t.deleteAllBtn(workers);
 
 
 

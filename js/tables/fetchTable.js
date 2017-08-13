@@ -47,7 +47,7 @@ let getTableHTML = function(mainTableObj, docs, params){ // used in fetchTable()
 // Fetch Table Function // (datastore assumed to be up to date)
 exports.fetchTable = function(mainTableObj, params={}){
     
-    // Fill in human-readable text into ID fields //
+    // Fill in human-readable text into ID fields and checkboxes//
     
     let data = JSON.parse(JSON.stringify(db.datastore[mainTableObj.name]));
     if (mainTableObj.fieldsMetaData && mainTableObj.fieldsMetaData.idFields){ // if it has id fields
@@ -71,8 +71,12 @@ exports.fetchTable = function(mainTableObj, params={}){
                             }
                             
                             data[i][fieldData.n] = hrStr || "none";
+                        } else { // item was not found
+                            data[i][fieldData.n] = '==Deleted=='
                         }
                     }
+                } else if ( fieldData.checkbox ){
+                    data[i][fieldData.n] = data[i][fieldData.n] == 'on' ? 'yes' : 'no';
                 }
             } );
         } );
@@ -118,6 +122,16 @@ exports.fetchTable = function(mainTableObj, params={}){
         }
     }
 
+    // Search by Before / After Dates for tasks
+    if (params.before){
+        let beforeTime = t.dateToNum(params.before); console.log(beforeTime);
+        data = data.filter( (item)=>{ return t.dateToNum(item.date) <= beforeTime } );
+    }
+    if (params.after){
+        let afterTime = t.dateToNum(params.after); console.log(afterTime);
+        data = data.filter( (item)=>{ return t.dateToNum(item.date) >= afterTime } );
+    }
+
     // Store History //
  
     mainTableObj.lastSearch = params;
@@ -152,6 +166,7 @@ exports.fetchTable = function(mainTableObj, params={}){
         mainTableObj.lastResults.forEach( (item)=>{ sum += Number(item[field]) } );
         alert('Total: '+sum);
     } );
+
 } // end showTable()
 
 noFalse = function(obj){ // checks that each property is not false

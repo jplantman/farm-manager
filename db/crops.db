@@ -1,7 +1,4 @@
-{"name":"carrots","variety":"","latinName":"Daucus carota","familyID":"DIxq92iAIA7gJBqX","spacing":"1","dtm":"62","notes":"","link":"https://en.wikipedia.org/wiki/Carrot","_id":"2ccG132XZMNBl9WG"}
-{"name":"onion","variety":"purple","latinName":"Allium cepa","familyID":"mPbo1Uka9L8xF9jD","spacing":"1","dtm":"111","notes":"","link":"https://en.wikipedia.org/wiki/Onion","_id":"RF6ZRub75NrfeSKk"}
-{"name":"brussel sprouts","variety":"","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Brussels_sprout","_id":"imvx7ShOQP4xJ43L"}
-{"name":"cabbage","variety":"green","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Cabbage","_id":"jX6mmPXw3w1iGI5c"}
-{"name":"cabbage","variety":"red","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Cabbage","_id":"ojU2v2kdM6lD2zen"}
-{"name":"cabbage","variety":"chinese","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Cabbage","_id":"wMrTumP55AiioSY4"}
-{"name":"broccoli","variety":"","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Broccoli","_id":"ygSdptca77iMoNiF"}
+{"name":"kohlrabi","variety":"kref","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"","_id":"BroPkyjYHRJYP0h1"}
+{"name":"broccoli","variety":"chief","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Broccoli","_id":"i4EXWJ58mN3nJcHA"}
+{"name":"onion","variety":"purple","latinName":"Allium cepa","familyID":"mPbo1Uka9L8xF9jD","spacing":"1","dtm":"111","notes":"","link":"https://en.wikipedia.org/wiki/Onion","_id":"mmOQPDPSdGitox3a"}
+{"name":"carrots","variety":"orange","latinName":"Daucus carota","familyID":"DIxq92iAIA7gJBqX","spacing":"1","dtm":"62","notes":"","link":"https://en.wikipedia.org/wiki/Carrot","_id":"raHLyuXxxzhSmw1h"}

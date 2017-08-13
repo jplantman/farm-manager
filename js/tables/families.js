@@ -26,7 +26,7 @@ families.fieldsData = [
 // Store Temp Data //
 families.lastSearch = {};
 families.lastAFSearch;
-families.lastResults = [];
+families.lastResults = db.datastore.families;
 families.lastSort = '';
 
 // ADD FORM // 
@@ -100,7 +100,8 @@ families.editForm.J = families.editForm.dialog({
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   families.fieldsData.filter( d=>!d.noAppear ).forEach( (f)=>{
@@ -140,7 +141,8 @@ families.tabElem.click( ()=>{
 	ft.fetchTable(families, {sortBy: 'name'} );
 } );
 
-
+// Delete all items showing button
+t.deleteAllBtn(families);
 
 
 

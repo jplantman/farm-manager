@@ -24,7 +24,7 @@ taskTypes.fieldsData = [
 // Store Temp Data //
 taskTypes.lastSearch = {};
 taskTypes.lastAFSearch;
-taskTypes.lastResults = [];
+taskTypes.lastResults = db.datastore.taskTypes;
 taskTypes.lastSort = '';
 
 // ADD FORM // 
@@ -93,7 +93,8 @@ taskTypes.editForm.J = taskTypes.editForm.dialog({
 
 // Search Form //
   // search form html
-html = '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
+html = "<div class='delete-all-showing ui-button flt-r mr'>Delete All Showing</div>"+
+	   '<input class="search-bar" data-query="allFields" placeholder="Search in any field" />'+
 	   '<div class="adv-search-btn">advanced search options</div>'+
 	   '<div class="adv-search-fields">';
 	   taskTypes.fieldsData.forEach( (f)=>{
@@ -133,7 +134,8 @@ taskTypes.tabElem.click( ()=>{
 	ft.fetchTable(taskTypes, {sortBy: 'name'} );
 } )
 
-
+// Delete all items showing button
+t.deleteAllBtn(taskTypes);
 
 
 
