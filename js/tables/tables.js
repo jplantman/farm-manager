@@ -103,6 +103,8 @@ exports.clear = function(mainTableObj, formStr){
 		// 	mainTableObj[formStr].fieldElems[prop][0].checked = false;
 		// }
 	}
+	$('.chosen-select option').prop('selected', false);
+	$('.chosen-select').trigger('chosen:updated');
 }
 
 exports.editItem = function(mainTableObj, id){

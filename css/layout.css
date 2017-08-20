@@ -8,7 +8,7 @@
 
 .container {
 	width: 98%;
-	margin: 5px auto;
+	margin: 0 auto;
 }
 
 main {
@@ -16,6 +16,10 @@ main {
 }
 
 #tabs > div {
+	overflow: scroll;
+}
+
+#crop, #row, #task, #taskType, #worker, #garden, #family {
 	overflow: scroll;
 }
 
@@ -32,10 +36,17 @@ main {
 .main-to-do, .main-accordions, .main-buttons {
 	display: inline-block;
 	height: 100%;
-	overflow: scroll;
+	/*overflow: scroll; MESSES WITH CHOSON DROPDOWNS */
 	padding: 3px;
 	vertical-align: top;
 }
 .main-to-do { width: 60% }
 .main-accordions { width: 27% }
 .main-buttons { width: 11% }
+
+h1 { font-size: 2em }
+h2 { font-size: 1.75em }
+h3 { font-size: 1.5em }
+
+
+

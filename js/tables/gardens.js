@@ -21,6 +21,7 @@ gardens.fieldsData = [
 	{n: 'notes', t: 'Notes', l: [0, 255]}
 ];
 
+
 // Store Temp Data //
 gardens.lastSearch = {};
 gardens.lastAFSearch;

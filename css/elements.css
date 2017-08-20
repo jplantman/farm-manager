@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .block {
 	display: block;
 	margin: 0.5em;
@@ -29,6 +43,8 @@ em {
 
 form { clear: both; }
 label, input { display:block; }
+/* chosen */
+.chosen-container { width: 95% !important; margin-bottom: 20px; }
 input[type="checkbox"] {display: inline-block;}
 input.text { margin-bottom:3px; width:95%; padding: .2em; }
 .search-bar { padding: 0.2em; width: 70%; border-radius: 5px; display: inline-block; margin: 0 10px 10px 0 }
@@ -70,6 +86,7 @@ h1 {
 }
 
 .table th {
+	font-weight: bold;
 	padding: .25em 1.5em;
 	border-bottom: 3px double grey;
 }

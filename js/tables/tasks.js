@@ -51,7 +51,7 @@ let html =
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
 	      	html += t.fillTemplate(tasks.fieldsData.slice(0, 2), template);
 
-	      	html += "<label for=taskTypeID>Task Type</label><select multiselect name='taskTypeID' class='mb-s'></select>";
+	      	html += "<label for=taskTypeID>Task Type</label><select name='taskTypeID' class='mb-s'></select>";
 	      	html += "<label for=gardenID>Garden</label><select name='gardenID' class='mb-s'></select>";
 	      	html += "<label for=rowID>Row</label><select name='rowID' class='mb-s'></select>";
 	      	html += "<label for=cropID>Crop</label><select name='cropID' class='mb-s'></select>";

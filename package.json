@@ -14,7 +14,9 @@
     "electron": "~1.6.2"
   },
   "dependencies": {
+    "jquery": "^3.2.1",
     "nedb": "^1.8.0",
+    "semantic-ui-dropdown": "^2.2.12",
     "validator": "^8.0.0"
   }
 }

@@ -44,11 +44,31 @@ let getTableHTML = function(mainTableObj, docs, params){ // used in fetchTable()
     
 }
 
+// for use in fetchTable 
+let getStringFromID = function(refDB, item, fieldData, i, data, idString){ // item[fieldData.n] is the id string
+    // get the referenced item
+    let refItem = findByID(refDB, idString); 
+    if ( refItem ){
+        // get the human-readable string //
+        let hrStr;
+        if (typeof fieldData.shows == 'string'){
+            hrStr = refItem[fieldData.shows];
+        } else if (typeof fieldData.shows == 'function') {
+            hrStr = fieldData.shows(refItem);
+        } else {
+            hrStr = refItem['name'];
+        }
+        
+        return hrStr || "none";
+    } else { // item was not found
+        return '==Deleted==';
+
+    }
+}
+
 // Fetch Table Function // (datastore assumed to be up to date)
 exports.fetchTable = function(mainTableObj, params={}){
-    
     // Fill in human-readable text into ID fields and checkboxes//
-    
     let data = JSON.parse(JSON.stringify(db.datastore[mainTableObj.name]));
     if (mainTableObj.fieldsMetaData && mainTableObj.fieldsMetaData.idFields){ // if it has id fields
         data.forEach( (item, i)=>{ // for each item,
@@ -57,27 +77,19 @@ exports.fetchTable = function(mainTableObj, params={}){
                     if (item[fieldData.n]){ // if that field isn't blank
                         // get the referenced db
                         let refDB = db.datastore[fieldData.n.replace('ID', '')];
-                        // get the referenced item
-                        let refItem = findByID(refDB, item[fieldData.n]); // item[fieldData.n] is the id string
-                        if ( refItem ){
-                            // get the human-readable string //
-                            let hrStr;
-                            if (typeof fieldData.shows == 'string'){
-                                hrStr = refItem[fieldData.shows];
-                            } else if (typeof fieldData.shows == 'function') {
-                                hrStr = fieldData.shows(refItem);
-                            } else {
-                                hrStr = refItem['name'];
-                            }
+                        if ( Array.isArray(item[fieldData.n])){ // if item is an array of id strings
                             
-                            data[i][fieldData.n] = hrStr || "none";
-                        } else { // item was not found
-                            data[i][fieldData.n] = '==Deleted=='
+                            data[i][fieldData.n] = data[i][fieldData.n].map( (idString)=>{
+                                return getStringFromID(refDB, item, fieldData, i, data, idString);
+                            } ).join(', ');
+                        } else { // else if item is an id string, and not an array of id strings
+                            data[i][fieldData.n] = getStringFromID(refDB, item, fieldData, i, data, item[fieldData.n]);
                         }
                     }
-                } else if ( fieldData.checkbox ){
-                    data[i][fieldData.n] = data[i][fieldData.n] == 'on' ? 'yes' : 'no';
-                }
+                } 
+                // else if ( fieldData.checkbox ){
+                //     data[i][fieldData.n] = data[i][fieldData.n] == 'on' ? 'yes' : 'no';
+                // }
             } );
         } );
     }

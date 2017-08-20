@@ -22,7 +22,7 @@ rows.fieldsData = [
 	{ n: 'notes', t: 'Notes'}
 ];
 rows.fieldsMetaData = {
-	idFields: ['garden']
+	idFields: ['garden', 'crop']
 }
 
 // Store Temp Data //
@@ -45,7 +45,7 @@ let html =
 
 	      	html += "<label for=gardenID>Garden</label><select name='gardenID' class='mb-s'></select>";
 
-	      	html += "<label for=cropID>Current Crops</label><select name='cropID' class='mb-s'></select>"
+	      	html += "<label for=cropID>Current Crops</label><select name='cropID' class='mb-s chosen-select' multiple data-placeholder='choose crop(s)'></select>"
 
 	      	template = '<label for="{{n}}">{{t}}</label>'+
 	      		'<input type="text" name="{{n}}" class="text ui-widget-content ui-corner-all {{fc}}"><br/>';
