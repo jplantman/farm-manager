@@ -1,3 +1,11 @@
+// validation helpers
+
+exports.valid = {
+	exists: function(str){ return str.length > 0 }
+}
+
+// general helpers
+
 exports.capitalize = function(str){
 	return str.replace(/\b\w/g, l => l.toUpperCase());
 }
@@ -23,4 +31,25 @@ exports.titleize = function(str){ // eg - 'helloThere' => 'Hello There';
 
 exports.nameize = function(str){ // eg - 'Hello There' => 'helloThere'
 	return h.uncapitalize( str.replace(' ', '') );
+}
+exports.sortBy = function(arr, prop, reverse){
+	return arr.sort( (a, b)=>{ 
+		if (reverse){
+			return a[prop] < b[prop];
+		} else {
+			return a[prop] > b[prop] 
+		}
+	} );
+}
+
+exports.sortTable = function(table, docs, prop){
+	if (table.sortedBy == prop){
+			docs = h.sortBy(docs, prop, true);
+			table.sortedBy = null;
+		} else {
+			docs = h.sortBy(docs, prop);
+			table.sortedBy = prop
+		}
+		
+		table.output.render();
 }

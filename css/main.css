@@ -36,8 +36,6 @@ small {
 button {
 	padding: 4px;
 	margin: 4px;
-	border-radius: 0px;
-	border: none;
 }
 
 
@@ -60,10 +58,20 @@ tr td:last-child {
 
 /* Forms */
 
-input, select {
+input, select, textarea {
 	padding: 2px;
-	border-radius: 8px;
 	margin: 3px;
+	border-bottom-left-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+
+input, select {
+	border-bottom-right-radius: 8px;
+}
+
+input[disabled] {
+	background: grey;
 }
 
 input.full {
@@ -71,9 +79,14 @@ input.full {
 	display: block;
 }
 
+.edit-field {
+	width: 90%;
+}
 
 
+/* bites */
 
+.ml { margin-left: 1em;}
 
 
 

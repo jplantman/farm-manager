@@ -16,13 +16,17 @@ crops.search = {
 crops.add = {
 	elem: $('<div></div>').appendTo(panel)
 };
+crops.edit = {
+	elem: $('<div></div>').appendTo(panel)
+};
 crops.output = {
 	elem: $('<div></div>').appendTo(panel)
 };
 
 
-
-require('../crops/output.js');
 require('../crops/add.js');
+require('../crops/edit.js');
+require('../crops/output.js');
+
 // require('../crops/create.js');
 // require('../crops/update.js');
