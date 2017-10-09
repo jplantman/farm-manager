@@ -10,23 +10,20 @@ app.tables.crops = {};
 let crops = app.tables.crops;
 
 // it has these components:
-crops.search = {
-	elem: $('<div></div>').appendTo(panel)
-};
-crops.add = {
-	elem: $('<div></div>').appendTo(panel)
-};
-crops.edit = {
-	elem: $('<div></div>').appendTo(panel)
-};
-crops.output = {
-	elem: $('<div></div>').appendTo(panel)
-};
+
+crops.search = { elem: $('<div></div>').appendTo(panel) };
+
+crops.add = { elem: $('<div></div>').appendTo(panel) };
+
+crops.edit = { elem: $('<div></div>').appendTo(panel) };
+
+crops.output = { elem: $('<div></div>').appendTo(panel) };
 
 
 require('../crops/add.js');
 require('../crops/edit.js');
 require('../crops/output.js');
+require('../crops/search.js');
 
 // require('../crops/create.js');
 // require('../crops/update.js');

@@ -21,7 +21,9 @@ FarmManager.refreshDatastore( ()=>{
 	// require app components in order
 	require('./src/components/header.js');
 	require('./src/components/tabs.js');
-	require('./src/components/crops/crops.js');	
+	require('./src/components/crops/crops.js');
+	console.log('TEST RENDER')
+	require('./src/components/families/families.js');
 
 } );
 

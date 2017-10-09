@@ -1,4 +1,6 @@
-{"name":"kohlrabi","variety":"kref","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"","_id":"BroPkyjYHRJYP0h1"}
-{"name":"broccoli","variety":"chief","latinName":"Brassica oleracea","familyID":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"","link":"https://en.wikipedia.org/wiki/Broccoli","_id":"i4EXWJ58mN3nJcHA"}
-{"name":"onion","variety":"purple","latinName":"Allium cepa","familyID":"mPbo1Uka9L8xF9jD","spacing":"1","dtm":"111","notes":"","link":"https://en.wikipedia.org/wiki/Onion","_id":"mmOQPDPSdGitox3a"}
-{"name":"carrots","variety":"orange","latinName":"Daucus carota","familyID":"DIxq92iAIA7gJBqX","spacing":"1","dtm":"62","notes":"","link":"https://en.wikipedia.org/wiki/Carrot","_id":"raHLyuXxxzhSmw1h"}
+{"name":"onion","variety":"green","latinName":"Allium cepa","family":"mPbo1Uka9L8xF9jD","spacing":"1","dtm":"40","link":"https://en.wikipedia.org/wiki/Onion","notes":"","_id":"F5gaq5r5QzHRSvJU"}
+{"name":"kohlrabi","variety":"kref","latinName":"Brassica oleracea","family":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","link":"","notes":"price: 1.50 | \nunit: single","_id":"KYCOHuxFzer69XfM"}
+{"name":"cabbage","variety":"savoy","latinName":"Brassica oleracea","family":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","notes":"price: 2.50 | \nunit: single","link":"https://en.wikipedia.org/wiki/Cabbage","_id":"V0cXaYM0AvSCklGd"}
+{"name":"kale","variety":"green","latinName":"Brassica oleracea","family":"RTegG6L8LHERv2uj","spacing":"12","dtm":"47","link":"https://en.wikipedia.org/wiki/Kale","notes":"price: 3 | \nunit: bundle","_id":"bAEFVgXYtURRE75u"}
+{"name":"carrots","variety":"orange","latinName":"Daucus carota","family":"DIxq92iAIA7gJBqX","spacing":"1","dtm":"62","link":"https://en.wikipedia.org/wiki/Carrot","notes":"price: 3 | unit: bundle","_id":"jJIciVx7g0Ocv0gn"}
+{"name":"kohlrabi","variety":"kref","latinName":"Brassica oleracea","family":"RTegG6L8LHERv2uj","spacing":"12","dtm":"58","link":"https://en.wikipedia.org/wiki/Kohlrabi","notes":"price: 1.50 | \nunit: single","_id":"KYCOHuxFzer69XfM"}

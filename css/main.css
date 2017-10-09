@@ -51,6 +51,7 @@ th {
 }
 td {
 	border-right: 1px solid;
+	vertical-align: top;
 }
 tr td:last-child {
 	border: none;
@@ -80,7 +81,7 @@ input.full {
 }
 
 .edit-field {
-	width: 90%;
+	width: 80%;
 }
 
 

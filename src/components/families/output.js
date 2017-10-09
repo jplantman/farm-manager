@@ -1,13 +1,13 @@
 let app = FarmManager || {};
 
-let tab = app.tabs.buttonElems.crop;
-let panel = app.tabs.panelElems.crop;
-let crops = app.tables.crops;
-let db = app.dbs.crops;
+let tab = app.tabs.buttonElems.family;
+let panel = app.tabs.panelElems.family;
+let families = app.tables.families;
+let db = app.dbs.families;
 
-crops.output.render = function( options ){
+families.output.render = function( options ){
 	// assume datastore is up to date
-	let docs = app.datastore.crops;
+	let docs = app.datastore.families;
 
 	// apply search filters
 	if (options){
@@ -61,18 +61,18 @@ crops.output.render = function( options ){
 	// Name th
 	let first = $('<th></th>').appendTo( th )
 	$('<span> Name </span>').appendTo( first ).click( ()=>{
-		h.sortTable(crops, docs, 'name');
+		h.sortTable(families, docs, 'name');
 	} );
 
 	// checkbox that, when clicked, affects all other checkboxes
 	$('<input type="checkbox" style="float: left; position: relative; left: -20px;" />').prependTo( first ).change( function(){
-		let len = crops.output.checkboxes.length;
+		let len = families.output.checkboxes.length;
 		for (let i = len - 1; i >= 0; i--) {
 			// disable changing if edit mode
-			if ( crops.edit.editMode ){
+			if ( families.edit.editMode ){
 				this.checked = !this.checked;
 			} else {
-				crops.output.checkboxes[i][0].checked = this.checked;
+				families.output.checkboxes[i][0].checked = this.checked;
 				checkboxCheck();
 			}
 		};
@@ -83,7 +83,7 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'variety');
+			h.sortTable(families, docs, 'variety');
 		}
 	} );
 
@@ -92,7 +92,7 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'latinName');
+			h.sortTable(families, docs, 'latinName');
 		}
 	} );
 
@@ -101,7 +101,7 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'family');
+			h.sortTable(families, docs, 'family');
 		}
 	} );
 
@@ -110,7 +110,7 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'spacing');
+			h.sortTable(families, docs, 'spacing');
 		}
 	} );
 
@@ -119,7 +119,7 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'dtm');
+			h.sortTable(families, docs, 'dtm');
 		}
 	} );
 
@@ -128,12 +128,12 @@ crops.output.render = function( options ){
 		if ( boxesChecked().length ){
 			console.log( 'editing this field' );
 		} else {
-			h.sortTable(crops, docs, 'notes');
+			h.sortTable(families, docs, 'notes');
 		}
 	} );
 
 	// checkboxes array will hold the checkboxes for the rows in the table
-	crops.output.checkboxes = [];
+	families.output.checkboxes = [];
 	
 	// make table rows from docs
 	let len = docs.length;
@@ -149,7 +149,7 @@ crops.output.render = function( options ){
 
 		// checkbox to select row item
 		let checkbox = $('<input type="checkbox" style="float: left; position: relative; left: -20px;" data-id="'+doc._id+'" />').prependTo(td)
-		crops.output.checkboxes.push( checkbox );
+		families.output.checkboxes.push( checkbox );
 
 		$('<td><span class="variety">'+(doc.variety || '')+'</span></td>').appendTo( tr );
 
@@ -170,14 +170,14 @@ crops.output.render = function( options ){
 	// checkboxes helper
 	function boxesChecked(){
 		let checkedBoxes = [];
-		let len = crops.output.checkboxes.length;
+		let len = families.output.checkboxes.length;
 		for (let i = len - 1; i >= 0; i--) {
-			let checkbox = crops.output.checkboxes[i];
+			let checkbox = families.output.checkboxes[i];
 			if ( checkbox[0].checked ){
 				checkedBoxes.push( checkbox );
 			}
 		};
-		crops.checkedBoxes = checkedBoxes;
+		families.checkedBoxes = checkedBoxes;
 		return checkedBoxes;
 	}
 
@@ -188,21 +188,21 @@ crops.output.render = function( options ){
 		
 		// if a box is checked and btnBar is not showing, show the btn bar
 		if ( oneIsChecked ){
-			crops.btnBarIsShowing = true;
-			crops.btnBar.show();
+			families.btnBarIsShowing = true;
+			families.btnBar.show();
 		} else if ( !oneIsChecked ) {
 			// else if noner are checked and bar is showing, hide it
-			crops.btnBarIsShowing = false;
-			crops.btnBar.hide();
+			families.btnBarIsShowing = false;
+			families.btnBar.hide();
 		}	
 	}
 
 	// apply checkbox behavior
-	for (let i = crops.output.checkboxes.length - 1; i >= 0; i--) {
-		let checkbox = crops.output.checkboxes[i];
+	for (let i = families.output.checkboxes.length - 1; i >= 0; i--) {
+		let checkbox = families.output.checkboxes[i];
 		checkbox.change( function(){
 			// disable changing if edit mode
-			if ( crops.edit.editMode ){
+			if ( families.edit.editMode ){
 				this.checked = !this.checked;
 			} else {
 				checkboxCheck();
@@ -211,12 +211,12 @@ crops.output.render = function( options ){
 	};
 
 	// append doc fragment
-	crops.output.elem.html(df);
+	families.output.elem.html(df);
 }
 
 
 // initially show output
-crops.output.render();
+families.output.render();
 
 
 

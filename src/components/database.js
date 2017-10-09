@@ -33,7 +33,40 @@ app.refreshDatastore = function(callback){ // gets each database, then runs a ca
 	}
 }
 
+app.getByID = function(db, id){ // e.g. app.getByID('crops', 'QW1234ERT67')
+	let database = app.datastore[db];
+	let len = database.length;
+	for (var i = 0; i < len; i++) {
+		let obj = database[i];
+		if ( obj._id == id ){
+			return obj;
+		}
+	};
+	console.log('ERROR', 'db: ', db, 'id:', id);
+	throw 'getByID error';
+}
+
 function dbsFilled(){
 	for (let prop in app.datastore){ if (!app.datastore[prop]){ return false } }
 	return true;
 }
+
+app.updateMany = function(db, array, callback){ // array has one little array for each update, structured: [query, update]
+	let numDocs = array.length;
+	let numUpdated = 0;
+
+	for (let i = 0; i < numDocs; i++) {
+		let query = array[i][0];
+		let update = array[i][1];
+		app.dbs[db].update( query, { $set: update }, {}, ()=>{
+			numUpdated++;
+			let allUpdatesDone = numDocs == numUpdated;
+			if ( allUpdatesDone ){
+				app.refreshDatastore( ()=>{
+					app.tables[db].output.render();
+				} );
+			}
+		} );
+	};
+}
+

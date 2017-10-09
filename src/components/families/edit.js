@@ -1,9 +1,9 @@
 let app = FarmManager || {};
 
-let tab = app.tabs.buttonElems.crop;
-let panel = app.tabs.panelElems.crop;
-let crops = app.tables.crops;
-let db = app.dbs.crops;
+let tab = app.tabs.buttonElems.family;
+let panel = app.tabs.panelElems.family;
+let families = app.tables.families;
+let db = app.dbs.families;
 
 // create edit form //
 
@@ -11,11 +11,11 @@ let db = app.dbs.crops;
 let df = $(document.createDocumentFragment());
 
 // button that shows and hides the add form
-let btn = $('<span class="link ml">Edit Selected</span>').appendTo( crops.btnBar ).click( function(){
+let btn = $('<span class="link ml">Edit Selected</span>').appendTo( families.btnBar ).click( function(){
 	// style of editing depends on how many boxes are checked. if only 1 is checked, the edit form will open.
 	// if more than 1 boxes are checked, in-line editing will toggle
 
-	let numberOfItemsChecked = crops.checkedBoxes.length;
+	let numberOfItemsChecked = families.checkedBoxes.length;
 	if ( numberOfItemsChecked > 1 ){
 		inLineEdit(this);
 	} else if ( numberOfItemsChecked == 1 ){
@@ -26,10 +26,10 @@ let btn = $('<span class="link ml">Edit Selected</span>').appendTo( crops.btnBar
 
 function inLineEdit(btnElem){ // click function to edit items in-line
 	// get each checked row, and id, like thisL [ $(tr), 'id' ]
-	let checkedRows = crops.checkedBoxes.map( box=>[box.parent().parent(), box.attr('data-id')] );
+	let checkedRows = families.checkedBoxes.map( box=>[box.parent().parent(), box.attr('data-id')] );
 
-	if ( !crops.edit.editMode ){ // enter edit mode
-		crops.edit.editMode = true;
+	if ( !families.edit.editMode ){ // enter edit mode
+		families.edit.editMode = true;
 		btnElem.innerHTML = "Save Changes";
 		// turn editing fields into inputs for editing //
 
@@ -65,7 +65,7 @@ function inLineEdit(btnElem){ // click function to edit items in-line
 			notesElem.innerHTML = '<textarea>'+notesElem.innerHTML+'</textarea>';
 		} );
 	} else { // leave edit mode
-		crops.edit.editMode = false;
+		families.edit.editMode = false;
 		btnElem.innerHTML = "Edit Selected";
 
 		// create obj to store edited item
@@ -113,10 +113,10 @@ function inLineEdit(btnElem){ // click function to edit items in-line
 			updatedItems.push([ { _id: tds[0].firstChild.getAttribute('data-id') }, updatedItem ]);
 		} );
 		console.log('TEST', updatedItems);
-		app.updateMany( 'crops', updatedItems, ()=>{
+		app.updateMany( 'families', updatedItems, ()=>{
 			app.refreshDatastore( ()=>{
-				crops.output.render();
-				crops.checkboxCheck();
+				families.output.render();
+				families.checkboxCheck();
 			} );
 		} )
 
@@ -162,20 +162,20 @@ let link = $('<input type="text" placeholder="URL (of online information page)" 
 let notes = $('<textarea type="text" placeholder="Additional notes..." class="full" ></textarea>').appendTo( form );
 
 // append doc frag with edit form to the edit form area
-crops.edit.elem.append( df );
+families.edit.elem.append( df );
 
 // add title to form
-crops.edit.elem.attr('title', 'Edit Selected Crop(s)');
+families.edit.elem.attr('title', 'Edit Selected Crop(s)');
 
 // jQuery dialog
-let dialog = crops.edit.elem.dialog({
+let dialog = families.edit.elem.dialog({
       autoOpen: false,
       height: 400,
       width: 350,
       modal: true,
       buttons: {
         Update: function(){
-        	let query = { _id: crops.checkedBoxes[0].attr('data-id') };
+        	let query = { _id: families.checkedBoxes[0].attr('data-id') };
         	let update = {
         		name: name[0].value,
         		variety: variety[0].value,
@@ -189,7 +189,7 @@ let dialog = crops.edit.elem.dialog({
         	let options = {};
         	let callback = function(){
         		app.refreshDatastore( ()=>{
-        			crops.output.render();
+        			families.output.render();
         			dialog.dialog( "close" );
         		} )
         	}
@@ -203,9 +203,9 @@ let dialog = crops.edit.elem.dialog({
 
 // populate edit dialog
 function populateEditDialog(){
-	let checkbox = crops.checkedBoxes[0]; // checkbox element
+	let checkbox = families.checkedBoxes[0]; // checkbox element
 	let id = checkbox.attr('data-id'); // get id from checkbox elem
-	let data = app.getByID('crops', id); // get data from datastore
+	let data = app.getByID('families', id); // get data from datastore
 
 	// name
 	name[0].value = data.name;

@@ -1,9 +1,9 @@
 let app = FarmManager || {};
 
-let tab = app.tabs.buttonElems.crop;
-let panel = app.tabs.panelElems.crop;
-let crops = app.tables.crops;
-let db = app.dbs.crops;
+let tab = app.tabs.buttonElems.family;
+let panel = app.tabs.panelElems.family;
+let families = app.tables.families;
+let db = app.dbs.families;
 
 // create add form //
 
@@ -16,7 +16,7 @@ let btn = $('<span class="link">Add New Item</span>').appendTo( df ).click( ()=>
 } );
 
 // btnbar holds buttons that show when checkboxes are selected
-crops.btnBar = $('<span style="display: none; margin-left: 10px; "></span>').appendTo( df );
+families.btnBar = $('<span style="display: none; margin-left: 10px; "></span>').appendTo( df );
 
 // hr
 df.append('<hr/>');
@@ -100,17 +100,17 @@ function validate(o){
 	return true;
 }
 
-// add crop function
-crops.add.func = function(newCrop){
+// add family function
+families.add.func = function(newCrop){
 	db.insert( newCrop, (err, newDoc)=>{
 		app.refreshDatastore( ()=>{
-			crops.output.render();
+			families.output.render();
 		} );
 	} );
 }
 
 // clear form
-crops.clear = function(){
+families.clear = function(){
 	quickAdd.val('');
 	name.val('');
 	variety.val('');
@@ -125,7 +125,7 @@ crops.clear = function(){
 
 
 // Delete btn
-let deleteBtn = $('<span class="link">Delete Selected</span>').appendTo( crops.btnBar ).click( ()=>{
+let deleteBtn = $('<span class="link">Delete Selected</span>').appendTo( families.btnBar ).click( ()=>{
 	deleteSelected();
 } );
 
@@ -133,17 +133,17 @@ function deleteSelected(){
 	if ( confirm('delete ALL selected items? This cannot be undone.') ){
 
 		let deleteList = [];
-		for (var i = crops.output.checkboxes.length - 1; i >= 0; i--) {
-			let checkbox = crops.output.checkboxes[i];
+		for (var i = families.output.checkboxes.length - 1; i >= 0; i--) {
+			let checkbox = families.output.checkboxes[i];
 			if ( checkbox[0].checked ){
 				deleteList.push( { _id: checkbox.attr('data-id') } )
 			}
 		};
 		db.remove( { $or: deleteList}, { multi: true }, (err, numRemoved)=>{
 			app.refreshDatastore( ()=>{
-				crops.output.render();
-				crops.btnBarIsShowing = false;
-				crops.btnBar.hide();
+				families.output.render();
+				families.btnBarIsShowing = false;
+				families.btnBar.hide();
 			} )
 		} );
 
@@ -153,7 +153,7 @@ function deleteSelected(){
 
 
 // append doc frag with add form to the add form area
-crops.add.elem.append( df );
+families.add.elem.append( df );
 
 // add title to form
 formArea.attr('title', 'Add New Crop');
@@ -177,15 +177,15 @@ let dialog = formArea.dialog({
 			link: link.val()
 		};
 		if ( !validate(newCrop) ){ return; }
-		crops.add.func( newCrop );
-		crops.clear();
+		families.add.func( newCrop );
+		families.clear();
 		dialog.dialog( "close" );
 		
         },
-        Clear: crops.clear,
+        Clear: families.clear,
         Cancel: function() {
           dialog.dialog( "close" );
-          crops.clear();
+          families.clear();
         }
       }
     });

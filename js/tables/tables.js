@@ -14,7 +14,7 @@ exports.dateToNum = function(dateStr){
 	if (/^[0-9][0-9] (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec), [0-9][0-9][0-9][0-9]$/.test(dateStr)){
 		return new Date(dateStr).getTime();
 	} else {
-		return 0
+		return 0;
 	}
 }
 
