@@ -29,14 +29,6 @@ let nameSearchNotBox = $('<input type="checkbox" />')
 	.appendTo( advSearchArea );
 nameSearchNotBox.after('Search for NOT this <br/>');
 
-let varietySearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by variety..." />').appendTo( advSearchArea )
-.on( 'input', ()=>{ families.output.render( getQuery() ) } );
-
-let varietySearchNotBox = $('<input type="checkbox" />')
-	.on( 'change', ()=>{ families.output.render( getQuery() ) } )
-	.appendTo( advSearchArea );
-varietySearchNotBox.after('Search for NOT this <br/>');
-
 let latinNameSearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by latin name..." />').appendTo( advSearchArea )
 .on( 'input', ()=>{ families.output.render( getQuery() ) } );
 
@@ -44,30 +36,6 @@ let latinNameSearchNotBox = $('<input type="checkbox" />')
 	.on( 'change', ()=>{ families.output.render( getQuery() ) } )
 	.appendTo( advSearchArea );
 latinNameSearchNotBox.after('Search for NOT this <br/>');
-
-let familySearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by family..." />').appendTo( advSearchArea )
-.on( 'input', ()=>{ families.output.render( getQuery() ) } );
-
-let familySearchNotBox = $('<input type="checkbox" />')
-	.on( 'change', ()=>{ families.output.render( getQuery() ) } )
-	.appendTo( advSearchArea );
-familySearchNotBox.after('Search for NOT this <br/>');
-
-let spacingSearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by spacing..." />').appendTo( advSearchArea )
-.on( 'input', ()=>{ families.output.render( getQuery() ) } );
-
-let spacingSearchNotBox = $('<input type="checkbox" />')
-	.on( 'change', ()=>{ families.output.render( getQuery() ) } )
-	.appendTo( advSearchArea );
-spacingSearchNotBox.after('Search for NOT this <br/>');
-
-let dtmSearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by dtm..." />').appendTo( advSearchArea )
-.on( 'input', ()=>{ families.output.render( getQuery() ) } );
-
-let dtmSearchNotBox = $('<input type="checkbox" />')
-	.on( 'change', ()=>{ families.output.render( getQuery() ) } )
-	.appendTo( advSearchArea );
-dtmSearchNotBox.after('Search for NOT this <br/>');
 
 let notesSearchBar = $('<input type="text" style="'+advSearchStyle+'" placeholder="Search by notes..." />').appendTo( advSearchArea )
 .on( 'input', ()=>{ families.output.render( getQuery() ) } );
@@ -89,13 +57,6 @@ function getQuery(){
 			not: nameSearchNotBox[0].checked
 		};
 	}
-	if (varietySearchBar[0].value){
-		query.advSearch = query.advSearch || {};
-		query.advSearch.variety = {
-			val: varietySearchBar[0].value,
-			not: varietySearchNotBox[0].checked
-		};
-	}
 	if (latinNameSearchBar[0].value){
 		query.advSearch = query.advSearch || {};
 		query.advSearch.latinName = {
@@ -103,27 +64,7 @@ function getQuery(){
 			not: latinNameSearchNotBox[0].checked
 		};
 	}
-	if (familySearchBar[0].value){
-		query.advSearch = query.advSearch || {};
-		query.advSearch.family = {
-			val: familySearchBar[0].value,
-			not: amilySearchNotBox[0].checked
-		};
-	}
-	if (spacingSearchBar[0].value){
-		query.advSearch = query.advSearch || {};
-		query.advSearch.spacing = {
-			val: spacingSearchBar[0].value,
-			bot: spacingSearchNotBox[0].checked
-		};
-	}
-	if (dtmSearchBar[0].value){
-		query.advSearch = query.advSearch || {};
-		query.advSearch.dtm = {
-			val: dtmSearchBar[0].value,
-			not: dtmSearchNotBox[0].checked
-		};
-	}
+	
 	if (notesSearchBar[0].value){
 		query.advSearch = query.advSearch || {};
 		query.advSearch.notes = {

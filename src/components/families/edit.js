@@ -44,21 +44,9 @@ function inLineEdit(btnElem){ // click function to edit items in-line
 			let nameElem = tds[0].lastChild;
 			nameElem.innerHTML = '<input type="text" class="edit-field" value="'+nameElem.innerHTML+'" />';
 
-			// variety
-			let varietyElem = tds[1].firstChild;
-			varietyElem.innerHTML = '<input type="text" class="edit-field" value="'+varietyElem.innerHTML+'" />';
-
 			// latinName
 			let latinNameElem = tds[2].lastChild;
 			latinNameElem.innerHTML = '<input type="text" class="edit-field" value="'+latinNameElem.innerHTML+'" />';
-
-			// spacing
-			let spacingElem = tds[4].lastChild;
-			spacingElem.innerHTML = '<input type="text" class="edit-field" value="'+spacingElem.innerHTML+'" />';
-
-			// dtm
-			let dtmElem = tds[5].lastChild;
-			dtmElem.innerHTML = '<input type="text" class="edit-field" value="'+dtmElem.innerHTML+'" />';
 
 			// notes
 			let notesElem = tds[6].lastChild;
@@ -85,25 +73,10 @@ function inLineEdit(btnElem){ // click function to edit items in-line
 			updatedItem.name = nameElem.firstChild.value;
 			nameElem.innerHTML = nameElem.firstChild.value;
 
-			// variety
-			let varietyElem = tds[1].firstChild;
-			updatedItem.variety = varietyElem.firstChild.value;
-			varietyElem.innerHTML = varietyElem.firstChild.value;
-
 			// latinName
 			let latinNameElem = tds[2].lastChild;
 			updatedItem.latinName = latinNameElem.firstChild.value;
 			latinNameElem.innerHTML = latinNameElem.firstChild.value;
-
-			// spacing
-			let spacingElem = tds[4].lastChild;
-			updatedItem.spacing = spacingElem.firstChild.value;
-			spacingElem.innerHTML = spacingElem.firstChild.value;
-
-			// dtm
-			let dtmElem = tds[5].lastChild;
-			updatedItem.dtm = dtmElem.firstChild.value;
-			dtmElem.innerHTML = dtmElem.firstChild.value;
 
 			// notes
 			let notesElem = tds[6].lastChild;
@@ -133,27 +106,8 @@ let form = $('<form></form>').appendTo( df );
 // name
 let name = $('<input type="text" placeholder="Name" class="full" />').appendTo( form );
 
-// variety
-let variety = $('<input type="text" placeholder="Variety" class="full" />').appendTo( form );
-
 // latinName
 let latinName = $('<input type="text" placeholder="Latin Name" class="full" />').appendTo( form );
-
-// family
-let family = $('<select></select>').appendTo( form );
-
-let famDocs = app.datastore.families; // get family docs
-$('<option value="">Choose a Family:</option>').appendTo( family ); // initial option
-for (var i = 0; i < famDocs.length; i++) { // family options
-	let famDoc = famDocs[i];
-	$('<option value="'+famDoc._id+'">'+famDoc.name+'</option>').appendTo( family );
-};
-
-// spacing
-let spacing = $('<input type="text" placeholder="Spacing" class="full" />').appendTo( form );
-
-// dtm
-let dtm = $('<input type="text" placeholder="Days To Maturity" class="full" />').appendTo( form );
 
 // link
 let link = $('<input type="text" placeholder="URL (of online information page)" class="full" />').appendTo( form );
@@ -178,11 +132,7 @@ let dialog = families.edit.elem.dialog({
         	let query = { _id: families.checkedBoxes[0].attr('data-id') };
         	let update = {
         		name: name[0].value,
-        		variety: variety[0].value,
         		latinName: latinName[0].value,
-        		family: family[0].value,
-        		spacing: spacing[0].value,
-        		dtm: dtm[0].value,
         		link: link[0].value,
         		notes: notes[0].value
         	};
@@ -210,20 +160,8 @@ function populateEditDialog(){
 	// name
 	name[0].value = data.name;
 
-	// variety
-	variety[0].value = data.variety;
-
 	// latinName
 	latinName[0].value = data.latinName;
-
-	// family
-	family[0].value = data.family;
-
-	// spacing
-	spacing[0].value = data.spacing;
-
-	// dtm
-	dtm[0].value = data.dtm;
 
 	// link
 	link[0].value = data.link;

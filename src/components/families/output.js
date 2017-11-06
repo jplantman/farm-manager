@@ -50,7 +50,7 @@ families.output.render = function( options ){
 	let df = document.createDocumentFragment();
 
 	// table title
-	$('<h2> Crops <small>('+docs.length+')</small> </h2>').appendTo( df );
+	$('<h2> Families <small>('+docs.length+')</small> </h2>').appendTo( df );
 
 	// render output as a table
 	let table = $('<table></table>').appendTo( df );
@@ -77,51 +77,6 @@ families.output.render = function( options ){
 			}
 		};
 	} )
-
-	// Variety th
-	$('<th> Variety </th>').appendTo( th ).click( ()=>{
-		if ( boxesChecked().length ){
-			console.log( 'editing this field' );
-		} else {
-			h.sortTable(families, docs, 'variety');
-		}
-	} );
-
-	// Latin Name th
-	$('<th> Latin Name </th>').appendTo( th ).click( ()=>{
-		if ( boxesChecked().length ){
-			console.log( 'editing this field' );
-		} else {
-			h.sortTable(families, docs, 'latinName');
-		}
-	} );
-
-	// Family th
-	$('<th> Family </th>').appendTo( th ).click( ()=>{
-		if ( boxesChecked().length ){
-			console.log( 'editing this field' );
-		} else {
-			h.sortTable(families, docs, 'family');
-		}
-	} );
-
-	// Spacing th
-	$('<th> Spacing </th>').appendTo( th ).click( ()=>{
-		if ( boxesChecked().length ){
-			console.log( 'editing this field' );
-		} else {
-			h.sortTable(families, docs, 'spacing');
-		}
-	} );
-
-	// D.T.M th
-	$('<th> D.T.M </th>').appendTo( th ).click( ()=>{
-		if ( boxesChecked().length ){
-			console.log( 'editing this field' );
-		} else {
-			h.sortTable(families, docs, 'dtm');
-		}
-	} );
 
 	// Notes th
 	$('<th> Notes </th>').appendTo( th ).click( ()=>{
@@ -151,15 +106,7 @@ families.output.render = function( options ){
 		let checkbox = $('<input type="checkbox" style="float: left; position: relative; left: -20px;" data-id="'+doc._id+'" />').prependTo(td)
 		families.output.checkboxes.push( checkbox );
 
-		$('<td><span class="variety">'+(doc.variety || '')+'</span></td>').appendTo( tr );
-
 		$('<td><span class="latinName">'+(doc.latinName || '')+'</span></td>').appendTo( tr );
-
-		$('<td><span class="family">'+( doc.family ? app.getByID('families', doc.family).name : '' )+'</span></td>').appendTo( tr );
-
-		$('<td><span class="spacing">'+(doc.spacing || '')+'</span></td>').appendTo( tr );
-
-		$('<td><span class="dtm">'+(doc.dtm || '')+'</span></td>').appendTo( tr );
 
 		$('<td><span class="notes">'+(doc.notes || '')+'</span></td>').appendTo( tr );
 

@@ -19,7 +19,6 @@ families.edit = { elem: $('<div></div>').appendTo(panel) };
 
 families.output = { elem: $('<div></div>').appendTo(panel) };
 
-console.log('TEST FAMILIES')
 require('../families/add.js');
 require('../families/edit.js');
 require('../families/output.js');
